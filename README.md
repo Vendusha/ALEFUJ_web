@@ -2,7 +2,7 @@
 
 Marketing/update site for the comic novel **ALEFUJ!** by Vendula Maulerová — Czech-only, built with [Astro](https://astro.build), hosted on GitHub Pages, deployed automatically by GitHub Actions on every push to `main`.
 
-**Status: Phase 0.** Publishing pipeline, all six sections (Home, Aktuality, Video, Kosťovy verše, Veroniččiny písně, Kosťův horoskop), and this README are done. Everything visible on the site right now is placeholder text — replace it with the real thing whenever you're ready (see below). The site currently lives at the default GitHub Pages URL, not yet at `alefuj.cz` — see "Switching to the custom domain" at the bottom.
+**Status: live at `alefuj.cz`.** Publishing pipeline, all six sections (Home, Aktuality, Video, Kosťovy verše, Veroniččiny písně, Kosťův horoskop), and this README are done. Everything visible on the site right now is placeholder text — replace it with the real thing whenever you're ready (see below).
 
 ---
 
@@ -109,12 +109,8 @@ The footer newsletter form (`src/components/Newsletter.astro`) posts to `ECOMAIL
 
 Every push to `main` triggers `.github/workflows/deploy.yml`, which builds the site and publishes it to GitHub Pages. In the repository's **Settings → Pages**, the source must be set to **GitHub Actions** (not "Deploy from a branch") for this to work.
 
-### Switching to the custom domain
+### Custom domain
 
-Right now the site deploys to the default project URL (`https://vendusha.github.io/ALEFUJ_web/`), with `base: '/ALEFUJ_web/'` set in `astro.config.mjs` — this is Phase 0, same starting point vendulasubert.cz went through before it moved to its own domain. Once `alefuj.cz` is registered and pointed at GitHub Pages, switching over is three steps:
-
-1. Add a `public/CNAME` file containing just `alefuj.cz` (copied verbatim into every build so GitHub Pages knows which domain to serve).
-2. In `astro.config.mjs`, change `site` to `'https://alefuj.cz'` and remove the `base` line entirely (or set it to `'/'`).
-3. In the repository's **Settings → Pages → Custom domain**, enter `alefuj.cz` — this is also where the HTTPS certificate gets provisioned.
+The site is served from the root of `alefuj.cz`, not a GitHub Pages project subpath — `astro.config.mjs` has no `base` set, and `site` is `'https://alefuj.cz'`. `public/CNAME` (containing just `alefuj.cz`) is copied verbatim into every build so GitHub Pages knows which domain to serve; the repository's **Settings → Pages → Custom domain** is also set to `alefuj.cz`, which is where the HTTPS certificate lives. If the domain is ever changed, update both places, plus `site` in `astro.config.mjs`.
 
 Only `alefuj.cz` is in scope for now — no `.com` registration yet (that's a future defensive-registration decision, not a technical one).
