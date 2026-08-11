@@ -1,0 +1,30 @@
+---
+import Newsletter from './Newsletter.astro';
+import { SITE_NAME, SITE_AUTHOR } from '../lib/site';
+import broucekIcon from '../assets/ilustrace/vinetka_13.png';
+import { Image } from 'astro:assets';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+	<div class="container">
+		<Image class="stamp" src={broucekIcon} alt="" width={40} loading="lazy" />
+		<Newsletter variant="teal" />
+		<p class="copyright">© {year} {SITE_AUTHOR} · {SITE_NAME}</p>
+	</div>
+</footer>
+
+<style>
+	.site-footer {
+		background: var(--ink);
+		color: var(--paper);
+		padding: 56px 0 32px;
+	}
+	.stamp {
+		height: 34px;
+		width: auto;
+		margin-bottom: 20px;
+		opacity: 0.85;
+	}
+</style>

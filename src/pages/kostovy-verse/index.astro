@@ -1,0 +1,104 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import sealIcon from '../../assets/ilustrace/vinetka_13.png';
+import { PRODUCT_TYPE_LABELS } from '../../lib/site';
+
+const poems = await getCollection('kostovyVerse');
+---
+
+<Layout
+	section="kostovy-verse/"
+	title="Kosťovy verše"
+	description="Kosťovy básně pro kapesníky a toaleťáky — ukázka, budoucí odměna kampaně na Hithit."
+>
+	<section class="panel panel-teal">
+		<div class="container">
+			<p class="section-label" style="color: var(--lime);">Sešit č. 5</p>
+			<h2>Kosťovy verše</h2>
+			<p class="intro">
+				Básně, které Kosťa píše na kapesníky a toaleťáky — running gag z knihy. Zatím jde jen
+				o ukázku: prodej je plánovaný jako odměna budoucí kampaně na Hithit, žádný nákup
+				tu tedy zatím nenajdete.
+			</p>
+			{
+				poems.length === 0 ? (
+					<p>Zatím žádné verše.</p>
+				) : (
+					<div class="verse-grid">
+						{poems.map((poem) => (
+							<div class="verse-ticket">
+								<div class="seal">
+									<Image src={sealIcon} alt="" width={34} />
+								</div>
+								<span class="tag">{PRODUCT_TYPE_LABELS[poem.data.productType]}</span>
+								<h3>{poem.data.title}</h3>
+								{poem.data.image && <Image class="poem-image" src={poem.data.image} alt="" width={320} />}
+								<p class="poem">{poem.data.text}</p>
+								<p class="note">→ budoucí kampaň Hithit, zatím jen k nahlédnutí</p>
+							</div>
+						))}
+					</div>
+				)
+			}
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.intro {
+		max-width: 60ch;
+		color: #dce7de;
+		margin-top: -12px;
+		margin-bottom: 34px;
+	}
+	.verse-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 24px;
+	}
+	.verse-ticket {
+		border: 2px dashed var(--paper);
+		padding: 22px;
+		position: relative;
+		background: var(--teal-deep);
+	}
+	.verse-ticket h3 {
+		margin: 12px 0 10px;
+	}
+	.poem-image {
+		display: block;
+		width: 100%;
+		height: auto;
+		border: 1px solid var(--paper);
+		margin-bottom: 14px;
+	}
+	.poem {
+		font-size: 15px;
+		color: #dfeee0;
+		font-style: italic;
+		line-height: 1.7;
+	}
+	.note {
+		font-family: var(--font-mono);
+		font-size: 11px;
+		color: var(--lime);
+		margin-top: 14px;
+		margin-bottom: 0;
+		text-transform: uppercase;
+	}
+	.seal {
+		position: absolute;
+		top: -14px;
+		right: -10px;
+		width: 54px;
+		height: 54px;
+		border-radius: 50%;
+		background: var(--lime);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transform: rotate(8deg);
+	}
+</style>

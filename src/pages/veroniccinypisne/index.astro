@@ -1,0 +1,78 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import musicIcon from '../../assets/ilustrace/vinetka_16.png';
+
+const songs = await getCollection('veroniccinyPisne');
+---
+
+<Layout section="veroniccinypisne/" title="Veroniččiny písně" description="Písně, které Veronika píše ke knize ALEFUJ!.">
+	<section class="panel panel-cream">
+		<div class="container">
+			<div class="section-head">
+				<Image class="staff" src={musicIcon} alt="" width={140} />
+			</div>
+			<p class="section-label">Sešit č. 6</p>
+			<h2>Veroniččiny písně</h2>
+			{
+				songs.length === 0 ? (
+					<p>Zatím žádné písně.</p>
+				) : (
+					<div class="song-list">
+						{songs.map((song) => (
+							<div class="song">
+								<h3>{song.data.title}</h3>
+								<p class="desc">{song.data.description}</p>
+								<div class="video-wrap">
+									<iframe
+										src={`https://www.youtube.com/embed/${song.data.youtubeId}`}
+										title={song.data.title}
+										loading="lazy"
+										allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+										allowfullscreen
+									/>
+								</div>
+							</div>
+						))}
+					</div>
+				)
+			}
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.section-head {
+		margin-bottom: -10px;
+	}
+	.staff {
+		opacity: 0.6;
+	}
+	.song-list {
+		display: grid;
+		gap: 40px;
+		margin-top: 30px;
+	}
+	.song h3 {
+		margin-bottom: 6px;
+	}
+	.desc {
+		color: var(--ink-soft);
+		margin-bottom: 16px;
+	}
+	.video-wrap {
+		position: relative;
+		width: 100%;
+		max-width: 640px;
+		aspect-ratio: 16 / 9;
+		border: 2px solid var(--ink);
+	}
+	.video-wrap iframe {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		border: none;
+	}
+</style>

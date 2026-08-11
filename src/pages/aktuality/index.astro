@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const allUpdates = await getCollection('aktuality');
+const updates = allUpdates.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const dateFormatter = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<Layout section="aktuality/" title="Aktuality" description="Novinky o knize ALEFUJ! — obálka, redakce, produkce.">
+	<section class="panel panel-cream">
+		<div class="container">
+			<p class="section-label">Sešit č. 2</p>
+			<h2>Aktuality</h2>
+			{
+				updates.length === 0 ? (
+					<p>Zatím žádné aktuality.</p>
+				) : (
+					<div class="updates">
+						{updates.map((post) => (
+							<a class="clip update-card" href={`${base}aktuality/${post.id}/`}>
+								<div class="date">{dateFormatter.format(post.data.date)}</div>
+								<h3>{post.data.title}</h3>
+								<p>{post.data.summary}</p>
+							</a>
+						))}
+					</div>
+				)
+			}
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.updates {
+		display: grid;
+		gap: 22px;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		margin-top: 30px;
+	}
+	.update-card {
+		display: block;
+		text-decoration: none;
+		color: var(--ink);
+		transform: rotate(-0.6deg);
+	}
+	.update-card:nth-child(even) {
+		transform: rotate(0.5deg);
+	}
+	.update-card .date {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		color: var(--ink-soft);
+	}
+	.update-card h3 {
+		margin: 8px 0;
+	}
+	.update-card p {
+		margin: 0;
+		color: var(--ink-soft);
+	}
+</style>

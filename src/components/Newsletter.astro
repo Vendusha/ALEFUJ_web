@@ -1,0 +1,118 @@
+---
+import { ECOMAIL_ALEFUJ_FORM_ENDPOINT_PLACEHOLDER } from '../lib/site';
+
+interface Props {
+	variant?: 'teal' | 'cream';
+}
+
+const { variant = 'teal' } = Astro.props;
+---
+
+<div id="newsletter" class:list={['newsletter', variant]}>
+	<h3>ALEFUJ! novinky</h3>
+	<p>Ať vám neuteče, až kniha vyjde. Žádný spam, jen upřímné novinky o knize.</p>
+	<!--
+		TODO(Ecomail): ECOMAIL_ALEFUJ_FORM_ENDPOINT_PLACEHOLDER in src/lib/site.ts
+		is a placeholder. Replace it with the real "action" URL from Ecomail's
+		own embed code for the "ALEFUJ! novinky" list (Ecomail dashboard →
+		Forms → your form → Embed code) — this is a separate list from the
+		vendulasubert.cz "novinky" list, same Ecomail account. Check whether
+		Ecomail's snippet expects extra hidden fields (list id, signature,
+		redirect URL) and add those as extra <input type="hidden"> fields below.
+	-->
+	<form class="newsletter-form" action={ECOMAIL_ALEFUJ_FORM_ENDPOINT_PLACEHOLDER} method="post">
+		<label for="newsletter-email">E-mail</label>
+		<div class="row">
+			<input id="newsletter-email" type="email" name="email" placeholder="váš e-mail" required />
+			<button type="submit">Přihlásit se</button>
+		</div>
+	</form>
+</div>
+
+<style>
+	.newsletter {
+		max-width: 460px;
+	}
+	.newsletter h3 {
+		font-family: var(--font-display);
+		font-size: 22px;
+		margin: 0 0 8px;
+	}
+	.newsletter.teal h3 {
+		color: var(--lime);
+	}
+	.newsletter p {
+		margin: 0 0 16px;
+	}
+	.newsletter.teal p {
+		color: #c9cfc4;
+	}
+	.newsletter.cream p {
+		color: var(--ink-soft);
+	}
+	.newsletter-form label {
+		display: block;
+		font-family: var(--font-mono);
+		font-size: 11px;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		margin-bottom: 8px;
+	}
+	.newsletter.teal label {
+		color: #c9cfc4;
+	}
+	.newsletter.cream label {
+		color: var(--ink-soft);
+	}
+	.row {
+		display: flex;
+		flex-wrap: wrap;
+		max-width: 420px;
+	}
+	.row input {
+		flex: 1;
+		min-width: 200px;
+		padding: 12px 14px;
+		font-family: var(--font-mono);
+		font-size: 14px;
+	}
+	.newsletter.teal .row input {
+		border: 2px solid var(--paper);
+		background: transparent;
+		color: var(--paper);
+	}
+	.newsletter.teal .row input::placeholder {
+		color: #9aa79a;
+	}
+	.newsletter.cream .row input {
+		border: 2px solid var(--ink);
+		background: transparent;
+		color: var(--ink);
+	}
+	.row button {
+		padding: 12px 20px;
+		font-family: var(--font-mono);
+		font-weight: 700;
+		font-size: 12px;
+		text-transform: uppercase;
+		cursor: pointer;
+	}
+	.newsletter.teal .row button {
+		background: var(--lime);
+		color: var(--teal-deep);
+		border: 2px solid var(--lime);
+	}
+	.newsletter.teal .row button:hover {
+		background: var(--paper);
+		border-color: var(--paper);
+	}
+	.newsletter.cream .row button {
+		background: var(--teal);
+		color: var(--paper);
+		border: 2px solid var(--teal);
+	}
+	.newsletter.cream .row button:hover {
+		background: var(--ink);
+		border-color: var(--ink);
+	}
+</style>

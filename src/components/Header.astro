@@ -1,0 +1,78 @@
+---
+import { SITE_NAME } from '../lib/site';
+
+interface Props {
+	section: string;
+}
+
+const { section } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const NAV = [
+	{ slug: '', label: 'Domů' },
+	{ slug: 'aktuality/', label: 'Aktuality' },
+	{ slug: 'video/', label: 'Video' },
+	{ slug: 'kostovy-verse/', label: 'Kosťovy verše' },
+	{ slug: 'veroniccinypisne/', label: 'Veroniččiny písně' },
+	{ slug: 'horoskop/', label: 'Kosťův horoskop' },
+];
+---
+
+<header class="site-header">
+	<div class="container inner">
+		<a class="logo" href={base}>{SITE_NAME}</a>
+		<nav aria-label="Hlavní navigace">
+			{
+				NAV.map((item) => (
+					<a href={`${base}${item.slug}`} aria-current={section === item.slug ? 'page' : undefined}>
+						{item.label}
+					</a>
+				))
+			}
+		</nav>
+	</div>
+</header>
+
+<style>
+	.site-header {
+		border-bottom: 2px dashed var(--ink);
+		background: var(--paper);
+	}
+	.inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 14px;
+		padding-block: 22px;
+	}
+	.logo {
+		font-family: var(--font-display);
+		font-weight: 900;
+		font-size: 24px;
+		text-decoration: none;
+		color: var(--ink);
+	}
+	nav {
+		display: flex;
+		gap: 18px;
+		flex-wrap: wrap;
+	}
+	nav a {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		text-decoration: none;
+		color: var(--ink);
+		border-bottom: 2px solid transparent;
+		padding-bottom: 2px;
+	}
+	nav a:hover {
+		color: var(--teal);
+	}
+	nav a[aria-current='page'] {
+		color: var(--teal);
+		border-bottom-color: var(--teal);
+	}
+</style>

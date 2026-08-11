@@ -1,0 +1,284 @@
+/* Design direction: "Scrapbook Dossier" — alternating teal/cream panels,
+   dashed ticket borders, mono stamp labels, hand-illustrated marginalia.
+   Approved from design-mockups/mockup-3.html. */
+
+:root {
+	--paper: #f6f1e4;
+	--paper-soft: #efe8d4;
+	--ink: #1a2620;
+	--ink-soft: #545b4c;
+	--teal: #1f6674;
+	--teal-deep: #123c46;
+	--lime: #d7de5c;
+	--rule: #cfc6ac;
+
+	--font-display: 'Fraunces', Georgia, serif;
+	--font-body: 'Source Serif 4', Georgia, serif;
+	--font-mono: 'Space Mono', 'Courier New', monospace;
+
+	--measure: 64ch;
+	--container-width: 1040px;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	background: var(--paper);
+}
+
+body {
+	margin: 0;
+	background: var(--paper);
+	color: var(--ink);
+	font-family: var(--font-body);
+	font-size: 18px;
+	line-height: 1.6;
+	-webkit-font-smoothing: antialiased;
+}
+
+.container {
+	max-width: var(--container-width);
+	margin: 0 auto;
+	padding-inline: 28px;
+	position: relative;
+}
+
+@media (max-width: 720px) {
+	.container {
+		padding-inline: 20px;
+	}
+}
+
+a {
+	color: inherit;
+}
+
+h1,
+h2,
+h3 {
+	font-family: var(--font-display);
+	font-weight: 700;
+	line-height: 1.15;
+	margin: 0 0 0.6em;
+}
+
+h1 {
+	font-size: clamp(38px, 6vw, 64px);
+	font-weight: 900;
+}
+
+h2 {
+	font-size: clamp(26px, 4vw, 34px);
+}
+
+h3 {
+	font-size: 20px;
+	margin-top: 0;
+}
+
+p {
+	margin: 0 0 1.1em;
+}
+
+.eyebrow,
+.section-label {
+	font-family: var(--font-mono);
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: var(--teal);
+	margin: 0 0 10px;
+}
+
+.hairline-dashed {
+	border: none;
+	border-top: 2px dashed var(--ink);
+	margin: 0;
+}
+
+/* Reading measure for long-form content (post bodies, about text) */
+.prose {
+	max-width: var(--measure);
+}
+
+.prose img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border: 1px solid var(--ink);
+	padding: 8px;
+	background: var(--paper);
+	margin: 1.6em 0;
+}
+
+.prose ul {
+	padding-left: 1.2em;
+}
+
+.prose li {
+	margin-bottom: 0.5em;
+}
+
+.prose strong {
+	font-weight: 600;
+}
+
+/* Panels: the site alternates full-bleed teal and cream sections */
+.panel {
+	position: relative;
+	overflow: hidden;
+}
+
+.panel-teal {
+	background: var(--teal);
+	color: var(--paper);
+}
+
+.panel-teal h1,
+.panel-teal h2,
+.panel-teal h3 {
+	color: var(--paper);
+}
+
+.panel-cream {
+	background: var(--paper);
+}
+
+section.panel {
+	padding: 60px 0;
+}
+
+/* Buttons */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-family: var(--font-mono);
+	font-weight: 700;
+	font-size: 13px;
+	text-transform: uppercase;
+	letter-spacing: 0.02em;
+	padding: 13px 22px;
+	text-decoration: none;
+	border: 2px solid var(--ink);
+	color: var(--ink);
+	cursor: pointer;
+	background: transparent;
+}
+
+.btn:hover {
+	background: var(--ink);
+	color: var(--paper);
+}
+
+.btn-on-teal {
+	border-color: var(--paper);
+	color: var(--paper);
+}
+
+.btn-on-teal:hover {
+	background: var(--lime);
+	color: var(--teal-deep);
+	border-color: var(--lime);
+}
+
+.btn-lime {
+	background: var(--lime);
+	border-color: var(--lime);
+	color: var(--teal-deep);
+}
+
+.btn-lime:hover {
+	background: var(--ink);
+	border-color: var(--ink);
+	color: var(--paper);
+}
+
+/* Ticket / stamp motifs */
+.ticket {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	font-family: var(--font-mono);
+	font-size: 12px;
+	background: var(--paper);
+	color: var(--teal-deep);
+	padding: 6px 14px;
+	border-radius: 3px;
+	border: 1px dashed var(--teal-deep);
+	margin-bottom: 22px;
+}
+
+.ticket img {
+	height: 22px;
+	width: auto;
+	vertical-align: middle;
+}
+
+.tag {
+	display: inline-block;
+	font-family: var(--font-mono);
+	font-size: 11px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	background: var(--lime);
+	color: var(--teal-deep);
+	padding: 3px 10px;
+	border-radius: 2px;
+}
+
+/* "Clipped note" card: paper card with a washi-tape corner */
+.clip {
+	background: var(--paper);
+	border: 2px solid var(--ink);
+	padding: 22px 24px;
+	position: relative;
+}
+
+.clip::before {
+	content: '';
+	position: absolute;
+	top: -8px;
+	left: 24px;
+	width: 40px;
+	height: 16px;
+	background: rgba(215, 222, 92, 0.55);
+	transform: rotate(-3deg);
+}
+
+/* Quiet marginalia: small illustration accents, used sparingly */
+.marginalia {
+	opacity: 0.8;
+}
+
+.marginalia img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.house-divider {
+	display: flex;
+	align-items: flex-end;
+	gap: 36px;
+	padding: 34px 0 0;
+	opacity: 0.8;
+}
+
+.house-divider img {
+	height: 58px;
+	width: auto;
+}
+
+.house-divider img:last-child {
+	height: 76px;
+}
+
+.copyright {
+	font-family: var(--font-mono);
+	font-size: 11px;
+	color: #8b998b;
+	margin-top: 36px;
+}

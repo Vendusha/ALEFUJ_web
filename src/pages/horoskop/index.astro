@@ -1,0 +1,204 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { MONTH_LABELS, ZODIAC_SIGN_LABELS } from '../../lib/site';
+
+const entries = await getCollection('horoskop');
+
+// Serialized once at build time and read by the client script below, which
+// picks the right month using the *visitor's* local date — there is no
+// server and no scheduled rebuild, so the "rotation" has to happen in the
+// browser at request time.
+const horoscopeData = entries
+	.sort((a, b) => a.data.month - b.data.month)
+	.map((entry) => ({
+		month: entry.data.month,
+		label: MONTH_LABELS[entry.data.month],
+		signs: entry.data.signs.map((s) => ({
+			sign: s.sign,
+			label: ZODIAC_SIGN_LABELS[s.sign],
+			text: s.text,
+		})),
+	}));
+
+// `</script>` inside the JSON would otherwise terminate the tag early.
+const safeJson = JSON.stringify(horoscopeData).replace(/</g, '\\u003c');
+---
+
+<Layout
+	section="horoskop/"
+	title="Kosťův horoskop"
+	description="Kosťův měsíční horoskop pro všech 12 znamení."
+>
+	<section class="panel panel-teal">
+		<div class="container">
+			<p class="section-label" style="color: var(--lime);">Sešit č. 7</p>
+			<h2>Kosťův horoskop</h2>
+			<div id="current-horoscope">
+				<p class="loading">Horoskop se načítá…</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="panel panel-cream">
+		<div class="container">
+			<p class="section-label">Archiv</p>
+			<h3 id="archive-heading" hidden>Předchozí měsíce</h3>
+			<div id="archive-list"></div>
+		</div>
+	</section>
+</Layout>
+
+<script type="application/json" id="horoscope-data" is:inline set:html={safeJson} />
+
+<script>
+	interface Sign {
+		sign: string;
+		label: string;
+		text: string;
+	}
+	interface Entry {
+		month: number;
+		label: string;
+		signs: Sign[];
+	}
+
+	function signsGrid(signs: Sign[]): HTMLDivElement {
+		const grid = document.createElement('div');
+		grid.className = 'signs-grid';
+		for (const s of signs) {
+			const card = document.createElement('div');
+			card.className = 'sign-card';
+			const h4 = document.createElement('h4');
+			h4.textContent = s.label;
+			const p = document.createElement('p');
+			p.textContent = s.text;
+			card.append(h4, p);
+			grid.append(card);
+		}
+		return grid;
+	}
+
+	function init() {
+		const dataEl = document.getElementById('horoscope-data');
+		const currentEl = document.getElementById('current-horoscope');
+		const archiveList = document.getElementById('archive-list');
+		const archiveHeading = document.getElementById('archive-heading');
+		if (!dataEl || !currentEl || !archiveList || !archiveHeading) return;
+
+		const entries: Entry[] = JSON.parse(dataEl.textContent || '[]');
+		const currentMonth = new Date().getMonth() + 1;
+		const current = entries.find((e) => e.month === currentMonth);
+
+		currentEl.innerHTML = '';
+		if (current) {
+			const heading = document.createElement('p');
+			heading.className = 'current-month';
+			heading.textContent = current.label;
+			currentEl.append(heading, signsGrid(current.signs));
+		} else {
+			const fallback = document.createElement('p');
+			fallback.className = 'fallback';
+			fallback.textContent = 'Kosťův horoskop na tento měsíc se připravuje.';
+			currentEl.append(fallback);
+		}
+
+		const archived = entries.filter((e) => e.month !== currentMonth);
+		if (archived.length > 0) {
+			archiveHeading.hidden = false;
+			for (const entry of archived) {
+				const details = document.createElement('details');
+				details.className = 'archive-entry';
+				const summary = document.createElement('summary');
+				summary.textContent = entry.label;
+				details.append(summary, signsGrid(entry.signs));
+				archiveList.append(details);
+			}
+		} else {
+			const note = document.createElement('p');
+			note.className = 'archive-empty';
+			note.textContent = 'Archiv se teprve buduje.';
+			archiveList.append(note);
+		}
+	}
+
+	init();
+</script>
+
+<style is:global>
+	/* is:global — the sign cards below are built by the client script at
+	   runtime, so they never get Astro's scoped data-attribute; scoped
+	   styles would silently fail to match them. */
+	.loading,
+	.fallback {
+		color: #dce7de;
+		font-style: italic;
+	}
+	.current-month {
+		font-family: var(--font-mono);
+		font-size: 13px;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--lime);
+		margin: 0 0 20px;
+	}
+	.signs-grid {
+		display: grid;
+		gap: 18px;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	}
+	.panel-teal .sign-card {
+		border: 1px dashed var(--paper);
+		padding: 16px 18px;
+	}
+	.sign-card h4 {
+		font-family: var(--font-display);
+		font-size: 16px;
+		margin: 0 0 8px;
+		color: var(--lime);
+	}
+	.panel-cream .sign-card h4 {
+		color: var(--teal);
+	}
+	.sign-card p {
+		margin: 0;
+		font-size: 14px;
+		line-height: 1.6;
+	}
+	.panel-teal .sign-card p {
+		color: #dfeee0;
+	}
+	.panel-cream .sign-card p {
+		color: var(--ink-soft);
+	}
+	#archive-heading {
+		font-size: 15px;
+		font-family: var(--font-mono);
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: var(--ink-soft);
+		margin-top: 0;
+	}
+	.archive-entry {
+		border-bottom: 1px solid var(--rule);
+		padding: 16px 0;
+	}
+	.archive-entry summary {
+		cursor: pointer;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 18px;
+		text-transform: capitalize;
+	}
+	.archive-entry .signs-grid {
+		margin-top: 18px;
+	}
+	.panel-cream .sign-card {
+		background: var(--paper-soft);
+		border: 1px solid var(--rule);
+	}
+	.archive-empty {
+		color: var(--ink-soft);
+		font-style: italic;
+	}
+</style>
