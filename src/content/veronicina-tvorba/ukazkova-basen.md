@@ -1,5 +1,5 @@
 ---
-title: "Ukázková báseň"
+title: "Když ráno vstanu a v zrcadle se nedohledám krásy"
 typ: basen
 description: "Když ráno vstanu a v zrcadle se nedohledám krásy"
 ---
