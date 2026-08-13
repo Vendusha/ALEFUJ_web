@@ -1,7 +1,7 @@
 ---
 title: "ALEFUJ!"
 lang: cs
-description: "ALEFUJ! — komiksový román. Marketingový a informační web ke knize."
+description: "ALEFUJ! — humoristický román. Marketingový a informační web ke knize."
 ---
 
 Jestli jsem vám před deseti lety řekla, že chystám knížku — letos ji dopisuju. Díky, že se mnou máte trpělivost.

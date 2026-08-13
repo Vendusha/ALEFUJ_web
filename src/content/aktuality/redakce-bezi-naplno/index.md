@@ -2,11 +2,8 @@
 title: "Redakce běží naplno"
 date: 2026-05-10
 lang: cs
-summary: "Text prochází jazykovou redakcí; Kosťa se s tím vyrovnává se ctí sobě vlastní, nýbrž s permanentním despektem."
+summary: "Text prochází redakcí; Kosťa se s tím vyrovnává se ctí sobě vlastní, Bára v knize i v redakci tvrdě pracuje."
 ---
-
-_(Zástupný text — nahraď skutečnou aktualitou.)_
-
-Rukopis je nyní v rukou jazykové redaktorky, pročež se dá očekávat, že
-se z něj v příštích týdnech vytratí přebytečné čárky, nikoliv však
-Kosťova povaha.
+Rukopis je nyní v rukou redaktorky Báry Miklasové, pročež se dá očekávat, že
+se z něj v příštích týdnech vytratí přebytečný autorčin patos, nikoliv však
+Kosťova povaha, či Bářina touha se stát Sherlockem Holmesem bez houslí, za to však s hobojem.
