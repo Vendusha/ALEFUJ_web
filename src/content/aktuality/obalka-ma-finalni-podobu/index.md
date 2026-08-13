@@ -1,6 +1,8 @@
 ---
 title: "Obálka má finální podobu"
 date: 2026-06-02
+lang: cs
+translationKey: "obalka-ma-finalni-podobu"
 summary: "Ilustrátorka dokončila teal obálku s brouky. Uvnitř najdete i černobílou verzi pro zadní stranu."
 ---
 

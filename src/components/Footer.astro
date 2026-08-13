@@ -1,17 +1,23 @@
 ---
 import Newsletter from './Newsletter.astro';
-import { SITE_NAME, SITE_AUTHOR } from '../lib/site';
+import { t, type Locale } from '../lib/i18n';
 import broucekIcon from '../assets/ilustrace/vinetka_13.png';
 import { Image } from 'astro:assets';
 
+interface Props {
+	lang: Locale;
+}
+
+const { lang } = Astro.props;
+const copy = t(lang).footer;
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
 	<div class="container">
 		<Image class="stamp" src={broucekIcon} alt="" width={40} loading="lazy" />
-		<Newsletter variant="teal" />
-		<p class="copyright">© {year} {SITE_AUTHOR} · {SITE_NAME}</p>
+		<Newsletter lang={lang} variant="teal" />
+		<p class="copyright">© {year} {copy.copyright} · ALEFUJ!</p>
 	</div>
 </footer>
 

@@ -1,0 +1,68 @@
+---
+import { render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '../../../layouts/Layout.astro';
+import { getAktuality, getTranslationSibling } from '../../../lib/aktuality';
+import { t, locales, otherLocale, dateLocale, type Locale } from '../../../lib/i18n';
+
+export async function getStaticPaths() {
+	const paths = [];
+	for (const lang of locales) {
+		const posts = await getAktuality(lang);
+		for (const post of posts) {
+			paths.push({ params: { lang, slug: post.id }, props: { post } });
+		}
+	}
+	return paths;
+}
+
+const lang = Astro.params.lang as Locale;
+const { post } = Astro.props as { post: Awaited<ReturnType<typeof getAktuality>>[number] };
+const { Content } = await render(post);
+const copy = t(lang).aktuality;
+const base = import.meta.env.BASE_URL;
+
+const dateFormatter = new Intl.DateTimeFormat(dateLocale(lang), { day: 'numeric', month: 'long', year: 'numeric' });
+
+// The language toggle needs the SPECIFIC sibling post (same translationKey,
+// other language), not just the Aktuality index — falls back to the index
+// when no translation exists.
+const other = otherLocale(lang);
+const sibling = await getTranslationSibling(post, other);
+const toggleHref = sibling ? `${base}${other}/aktuality/${sibling.id}/` : `${base}${other}/aktuality/`;
+---
+
+<Layout lang={lang} section="aktuality/" toggleHref={toggleHref} title={post.data.title} description={post.data.summary}>
+	<section class="panel panel-cream">
+		<div class="container prose">
+			<a class="back" href={`${base}${lang}/aktuality/`}>{copy.backLink}</a>
+			<p class="date">{dateFormatter.format(post.data.date)}</p>
+			<h1>{post.data.title}</h1>
+			{post.data.heroImage && <Image src={post.data.heroImage} alt="" widths={[400, 800]} sizes="80vw" />}
+			<Content />
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.back {
+		display: inline-block;
+		font-family: var(--font-mono);
+		font-size: 12px;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		text-decoration: none;
+		color: var(--teal);
+		margin-bottom: 24px;
+	}
+	.back:hover {
+		color: var(--ink);
+	}
+	.date {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+		margin-bottom: 4px;
+	}
+</style>

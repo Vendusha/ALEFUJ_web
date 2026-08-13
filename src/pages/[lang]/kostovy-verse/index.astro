@@ -1,30 +1,32 @@
 ---
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
-import Layout from '../../layouts/Layout.astro';
-import sealIcon from '../../assets/ilustrace/vinetka_13.png';
-import { PRODUCT_TYPE_LABELS } from '../../lib/site';
+import Layout from '../../../layouts/Layout.astro';
+import CzechOnlyNotice from '../../../components/CzechOnlyNotice.astro';
+import sealIcon from '../../../assets/ilustrace/vinetka_13.png';
+import { PRODUCT_TYPE_LABELS } from '../../../lib/site';
+import { t, locales, type Locale } from '../../../lib/i18n';
+
+export function getStaticPaths() {
+	return locales.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Locale;
+const copy = t(lang).kostovyVerse;
 
 const poems = await getCollection('kostovyVerse');
 ---
 
-<Layout
-	section="kostovy-verse/"
-	title="Kosťovy verše"
-	description="Kosťovy básně pro kapesníky a toaleťáky — ukázka, budoucí odměna kampaně na Hithit."
->
+<Layout lang={lang} section="kostovy-verse/" title={copy.heading} description={copy.intro}>
 	<section class="panel panel-teal">
 		<div class="container">
 			<p class="section-label" style="color: var(--lime);">Sešit č. 5</p>
-			<h2>Kosťovy verše</h2>
-			<p class="intro">
-				Básně, které Kosťa píše na kapesníky a toaleťáky — running gag z knihy. Zatím jde jen
-				o ukázku: prodej je plánovaný jako odměna budoucí kampaně na Hithit, žádný nákup
-				tu tedy zatím nenajdete.
-			</p>
+			<h2>{copy.heading}</h2>
+			<p class="intro">{copy.intro}</p>
+			{lang === 'en' && <CzechOnlyNotice message={copy.czechOnlyNote} />}
 			{
 				poems.length === 0 ? (
-					<p>Zatím žádné verše.</p>
+					<p>{copy.empty}</p>
 				) : (
 					<div class="verse-grid">
 						{poems.map((poem) => (
@@ -36,7 +38,7 @@ const poems = await getCollection('kostovyVerse');
 								<h3>{poem.data.title}</h3>
 								{poem.data.image && <Image class="poem-image" src={poem.data.image} alt="" width={320} />}
 								<p class="poem">{poem.data.text}</p>
-								<p class="note">→ budoucí kampaň Hithit, zatím jen k nahlédnutí</p>
+								<p class="note">{copy.hithitNote}</p>
 							</div>
 						))}
 					</div>

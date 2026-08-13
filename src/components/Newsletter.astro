@@ -1,30 +1,39 @@
 ---
-import { ECOMAIL_ALEFUJ_FORM_ENDPOINT_PLACEHOLDER } from '../lib/site';
+import { t, type Locale } from '../lib/i18n';
+import { MAILERLITE_ALEFUJ_FORM_ENDPOINT } from '../lib/i18n';
 
 interface Props {
+	lang: Locale;
 	variant?: 'teal' | 'cream';
+	/** Only set this on one instance per page if you need a #anchor to jump to it. */
+	id?: string;
 }
 
-const { variant = 'teal' } = Astro.props;
+const { lang, variant = 'teal', id } = Astro.props;
+const copy = t(lang).footer;
+const inputId = `newsletter-email-${lang}-${variant}`;
 ---
 
-<div id="newsletter" class:list={['newsletter', variant]}>
-	<h3>ALEFUJ! novinky</h3>
-	<p>Ať vám neuteče, až kniha vyjde. Žádný spam, jen upřímné novinky o knize.</p>
+<div id={id} class:list={['newsletter', variant]}>
+	<h3>{copy.newsletterHeading}</h3>
+	<p>{copy.newsletterBody}</p>
 	<!--
-		TODO(Ecomail): ECOMAIL_ALEFUJ_FORM_ENDPOINT_PLACEHOLDER in src/lib/site.ts
-		is a placeholder. Replace it with the real "action" URL from Ecomail's
-		own embed code for the "ALEFUJ! novinky" list (Ecomail dashboard →
-		Forms → your form → Embed code) — this is a separate list from the
-		vendulasubert.cz "novinky" list, same Ecomail account. Check whether
-		Ecomail's snippet expects extra hidden fields (list id, signature,
-		redirect URL) and add those as extra <input type="hidden"> fields below.
+		Plain HTML form POST to MailerLite's "subscribe" endpoint — no JS embed,
+		no tracking script. `fields[email]` is MailerLite's required field
+		naming for this endpoint. `ml-submit` marks it as a real form submission
+		(matches MailerLite's own non-JS embed code). `target="_blank"` is what
+		makes this work without JavaScript while not navigating the visitor away
+		from this page: the browser opens MailerLite's own hosted response page
+		in a new tab, which — since double opt-in is on for this list — tells
+		them to check their email for the confirmation link. That page is
+		controlled in the MailerLite dashboard, not in this repo.
 	-->
-	<form class="newsletter-form" action={ECOMAIL_ALEFUJ_FORM_ENDPOINT_PLACEHOLDER} method="post">
-		<label for="newsletter-email">E-mail</label>
+	<form class="newsletter-form" action={MAILERLITE_ALEFUJ_FORM_ENDPOINT} method="post" target="_blank">
+		<input type="hidden" name="ml-submit" value="1" />
+		<label for={inputId}>{copy.emailLabel}</label>
 		<div class="row">
-			<input id="newsletter-email" type="email" name="email" placeholder="váš e-mail" required />
-			<button type="submit">Přihlásit se</button>
+			<input id={inputId} type="email" name="fields[email]" placeholder={copy.emailPlaceholder} required />
+			<button type="submit">{copy.submitLabel}</button>
 		</div>
 	</form>
 </div>

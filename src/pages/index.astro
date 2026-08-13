@@ -1,185 +1,34 @@
 ---
-import { getCollection } from 'astro:content';
-import { Image } from 'astro:assets';
-import Layout from '../layouts/Layout.astro';
-import frontCover from '../assets/ilustrace/front-cover-teal.png';
-import houseSketch1 from '../assets/ilustrace/house-sketch-01.png';
-import houseSketch2 from '../assets/ilustrace/house-sketch-02.png';
-import broucekIcon from '../assets/ilustrace/vinetka_25.png';
-import { BOOK_STATUS } from '../lib/site';
+// Static-hosting language redirect: GitHub Pages can't do server-side
+// language negotiation, so this picks a language client-side and redirects.
+// Defaults to Czech whenever English isn't clearly preferred, and degrades
+// to a plain meta-refresh to /cs/ when JavaScript is unavailable.
+import { siteName } from '../lib/i18n';
 
 const base = import.meta.env.BASE_URL;
-
-const allUpdates = await getCollection('aktuality');
-const latestUpdates = allUpdates.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 3);
-
-const dateFormatter = new Intl.DateTimeFormat('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' });
-
-const SECTIONS = [
-	{ href: 'video/', label: 'Video', desc: 'Krátké video o knize.' },
-	{ href: 'kostovy-verse/', label: 'Kosťovy verše', desc: 'Básně na kapesníky a toaleťáky.' },
-	{ href: 'veroniccinypisne/', label: 'Veroniččiny písně', desc: 'Písně, které ke knize vznikají.' },
-	{ href: 'horoskop/', label: 'Kosťův horoskop', desc: 'Měsíční horoskop od Kosti.' },
-];
+const csHref = `${base}cs/`;
+const enHref = `${base}en/`;
 ---
 
-<Layout section="" title="Domů" description="ALEFUJ! — komiksový román. Marketingový a informační web ke knize.">
-	<div class="hero panel panel-teal">
-		<div class="container hero-grid">
-			<div class="hero-copy">
-				<div class="ticket">
-					<Image src={broucekIcon} alt="" width={22} />
-					ZÁPIS Č. 001 — {BOOK_STATUS.toUpperCase()}
-				</div>
-				<h1>ALEFUJ!</h1>
-				<p class="lede">
-					Komiksový román o tom, jak se člověk může splést v podstatě ve všem — a přesto
-					z toho vzejde něco, co stojí za přečtení.
-					<em>(Zástupný popisek — nahraď skutečným textem o knize.)</em>
-				</p>
-				<a class="btn btn-on-teal" href="#newsletter">→ Přihlásit se k novinkám</a>
-			</div>
-			<div class="hero-cover">
-				<Image src={frontCover} alt="Obálka knihy ALEFUJ!" widths={[400, 700, 1000]} sizes="(min-width: 760px) 40vw, 80vw" />
-			</div>
-		</div>
-	</div>
-
-	<div class="container house-divider">
-		<Image src={houseSketch1} alt="" width={200} />
-		<Image src={houseSketch2} alt="" width={260} />
-	</div>
-
-	<section class="panel panel-cream">
-		<div class="container">
-			<p class="section-label">Sešit č. 2</p>
-			<h2>Aktuality</h2>
-			{
-				latestUpdates.length === 0 ? (
-					<p>Zatím žádné aktuality.</p>
-				) : (
-					<div class="updates">
-						{latestUpdates.map((post) => (
-							<a class="clip update-card" href={`${base}aktuality/${post.id}/`}>
-								<div class="date">{dateFormatter.format(post.data.date)}</div>
-								<h3>{post.data.title}</h3>
-								<p>{post.data.summary}</p>
-							</a>
-						))}
-					</div>
-				)
-			}
-			<a class="btn" style="margin-top:28px;" href={`${base}aktuality/`}>Všechny aktuality →</a>
-		</div>
-	</section>
-
-	<section class="panel panel-teal">
-		<div class="container">
-			<p class="section-label" style="color: var(--lime);">Sešit č. 3</p>
-			<h2>Víc o knize</h2>
-			<div class="link-grid">
-				{
-					SECTIONS.map((s) => (
-						<a class="link-card" href={`${base}${s.href}`}>
-							<h3>{s.label}</h3>
-							<p>{s.desc}</p>
-						</a>
-					))
-				}
-			</div>
-		</div>
-	</section>
-</Layout>
-
-<style>
-	.hero {
-		padding: 60px 0 90px;
-	}
-	.hero-grid {
-		display: grid;
-		grid-template-columns: 1.1fr 0.9fr;
-		gap: 44px;
-		align-items: center;
-	}
-	.hero-cover :global(img) {
-		display: block;
-		width: 100%;
-		height: auto;
-		border: 6px solid var(--paper);
-		box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
-		transform: rotate(2deg);
-	}
-	@media (max-width: 760px) {
-		.hero-grid {
-			grid-template-columns: 1fr;
-		}
-		.hero-cover {
-			order: -1;
-			max-width: 300px;
-			margin: 0 auto;
-		}
-	}
-	.lede {
-		max-width: 46ch;
-		color: #e6efe4;
-		font-size: 18px;
-	}
-	.lede em {
-		color: #c9cfc4;
-		font-style: italic;
-	}
-
-	.updates {
-		display: grid;
-		gap: 22px;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-	}
-	.update-card {
-		display: block;
-		text-decoration: none;
-		color: var(--ink);
-		transform: rotate(-0.6deg);
-	}
-	.update-card:nth-child(even) {
-		transform: rotate(0.5deg);
-	}
-	.update-card .date {
-		font-family: var(--font-mono);
-		font-size: 12px;
-		color: var(--ink-soft);
-	}
-	.update-card h3 {
-		margin: 8px 0;
-	}
-	.update-card p {
-		margin: 0;
-		color: var(--ink-soft);
-	}
-
-	.link-grid {
-		display: grid;
-		gap: 20px;
-		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-	}
-	.link-card {
-		display: block;
-		text-decoration: none;
-		color: var(--paper);
-		border: 2px dashed var(--paper);
-		padding: 20px;
-		border-radius: 4px;
-	}
-	.link-card:hover {
-		border-color: var(--lime);
-		background: rgba(255, 255, 255, 0.05);
-	}
-	.link-card h3 {
-		margin: 0 0 8px;
-		color: var(--lime);
-	}
-	.link-card p {
-		margin: 0;
-		color: #d8e3d5;
-		font-size: 15px;
-	}
-</style>
+<!doctype html>
+<html lang="cs">
+	<head>
+		<meta charset="utf-8" />
+		<title>{siteName}</title>
+		<!-- Only takes effect when JavaScript is disabled — otherwise the
+		     script below runs first and picks a language. -->
+		<noscript>
+			<meta http-equiv="refresh" content={`0; url=${csHref}`} />
+		</noscript>
+		<script is:inline define:vars={{ csHref, enHref }}>
+			var preferred = (navigator.languages && navigator.languages[0]) || navigator.language || 'cs';
+			var target = preferred.toLowerCase().startsWith('en') ? enHref : csHref;
+			window.location.replace(target);
+		</script>
+	</head>
+	<body>
+		<noscript>
+			<p><a href={csHref}>Pokračovat v češtině</a> / <a href={enHref}>Continue in English</a></p>
+		</noscript>
+	</body>
+</html>

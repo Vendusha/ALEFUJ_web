@@ -1,0 +1,29 @@
+---
+// Used on the horoskop / kostovy-verse / veronicina-tvorba pages when
+// lang === 'en': the writing on those pages is deliberately never
+// translated (see the "Bilingual" section of the README), so this explains
+// that as a choice rather than a missing feature.
+interface Props {
+	message: string;
+}
+
+const { message } = Astro.props;
+---
+
+<p class="czech-only-notice">{message}</p>
+
+<style is:global>
+	.czech-only-notice {
+		font-family: var(--font-mono);
+		font-size: 13px;
+		line-height: 1.6;
+		max-width: 60ch;
+		margin: -8px 0 30px;
+	}
+	.panel-teal .czech-only-notice {
+		color: #dce7de;
+	}
+	.panel-cream .czech-only-notice {
+		color: var(--ink-soft);
+	}
+</style>

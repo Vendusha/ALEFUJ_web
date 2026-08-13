@@ -1,6 +1,7 @@
 ---
 title: "Redakce běží naplno"
 date: 2026-05-10
+lang: cs
 summary: "Text prochází jazykovou redakcí; Kosťa se s tím vyrovnává se ctí sobě vlastní, nýbrž s permanentním despektem."
 ---
 

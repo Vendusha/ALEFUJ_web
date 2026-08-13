@@ -1,14 +1,24 @@
 ---
 import { getCollection } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
-import { MONTH_LABELS, ZODIAC_SIGN_LABELS } from '../../lib/site';
+import Layout from '../../../layouts/Layout.astro';
+import CzechOnlyNotice from '../../../components/CzechOnlyNotice.astro';
+import { MONTH_LABELS, ZODIAC_SIGN_LABELS } from '../../../lib/site';
+import { t, locales, type Locale } from '../../../lib/i18n';
+
+export function getStaticPaths() {
+	return locales.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Locale;
+const copy = t(lang).horoskop;
 
 const entries = await getCollection('horoskop');
 
 // Serialized once at build time and read by the client script below, which
 // picks the right month using the *visitor's* local date — there is no
 // server and no scheduled rebuild, so the "rotation" has to happen in the
-// browser at request time.
+// browser at request time. The horoscope text itself is Czech-only (see
+// CzechOnlyNotice below), so this never changes with `lang`.
 const horoscopeData = entries
 	.sort((a, b) => a.data.month - b.data.month)
 	.map((entry) => ({
@@ -25,31 +35,29 @@ const horoscopeData = entries
 const safeJson = JSON.stringify(horoscopeData).replace(/</g, '\\u003c');
 ---
 
-<Layout
-	section="horoskop/"
-	title="Kosťův horoskop"
-	description="Kosťův měsíční horoskop pro všech 12 znamení."
->
+<Layout lang={lang} section="horoskop/" title={copy.heading} description={copy.heading}>
 	<section class="panel panel-teal">
 		<div class="container">
 			<p class="section-label" style="color: var(--lime);">Sešit č. 7</p>
-			<h2>Kosťův horoskop</h2>
+			<h2>{copy.heading}</h2>
+			{lang === 'en' && <CzechOnlyNotice message={copy.czechOnlyNote} />}
 			<div id="current-horoscope">
-				<p class="loading">Horoskop se načítá…</p>
+				<p class="loading">{copy.loading}</p>
 			</div>
 		</div>
 	</section>
 
 	<section class="panel panel-cream">
 		<div class="container">
-			<p class="section-label">Archiv</p>
-			<h3 id="archive-heading" hidden>Předchozí měsíce</h3>
+			<p class="section-label">{copy.archiveEyebrow}</p>
+			<h3 id="archive-heading" hidden>{copy.archiveHeading}</h3>
 			<div id="archive-list"></div>
 		</div>
 	</section>
 </Layout>
 
 <script type="application/json" id="horoscope-data" is:inline set:html={safeJson} />
+<script type="application/json" id="horoscope-strings" is:inline set:html={JSON.stringify({ fallback: copy.fallback, archiveEmpty: copy.archiveEmpty })} />
 
 <script>
 	interface Sign {
@@ -81,12 +89,14 @@ const safeJson = JSON.stringify(horoscopeData).replace(/</g, '\\u003c');
 
 	function init() {
 		const dataEl = document.getElementById('horoscope-data');
+		const stringsEl = document.getElementById('horoscope-strings');
 		const currentEl = document.getElementById('current-horoscope');
 		const archiveList = document.getElementById('archive-list');
 		const archiveHeading = document.getElementById('archive-heading');
-		if (!dataEl || !currentEl || !archiveList || !archiveHeading) return;
+		if (!dataEl || !stringsEl || !currentEl || !archiveList || !archiveHeading) return;
 
 		const entries: Entry[] = JSON.parse(dataEl.textContent || '[]');
+		const strings: { fallback: string; archiveEmpty: string } = JSON.parse(stringsEl.textContent || '{}');
 		const currentMonth = new Date().getMonth() + 1;
 		const current = entries.find((e) => e.month === currentMonth);
 
@@ -99,7 +109,7 @@ const safeJson = JSON.stringify(horoscopeData).replace(/</g, '\\u003c');
 		} else {
 			const fallback = document.createElement('p');
 			fallback.className = 'fallback';
-			fallback.textContent = 'Kosťův horoskop na tento měsíc se připravuje.';
+			fallback.textContent = strings.fallback;
 			currentEl.append(fallback);
 		}
 
@@ -117,7 +127,7 @@ const safeJson = JSON.stringify(horoscopeData).replace(/</g, '\\u003c');
 		} else {
 			const note = document.createElement('p');
 			note.className = 'archive-empty';
-			note.textContent = 'Archiv se teprve buduje.';
+			note.textContent = strings.archiveEmpty;
 			archiveList.append(note);
 		}
 	}

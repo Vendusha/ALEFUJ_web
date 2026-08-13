@@ -1,34 +1,44 @@
 ---
-import { SITE_NAME } from '../lib/site';
+import { siteName, t, otherLocale, type Locale } from '../lib/i18n';
 
 interface Props {
+	lang: Locale;
 	section: string;
+	/** Explicit override for where the language toggle links to. Falls back
+	 * to this section's index in the other language when omitted. */
+	toggleHref?: string;
 }
 
-const { section } = Astro.props;
+const { lang, section, toggleHref: toggleHrefOverride } = Astro.props;
 const base = import.meta.env.BASE_URL;
+const other = otherLocale(lang);
+const copy = t(lang);
 
 const NAV = [
-	{ slug: '', label: 'Domů' },
-	{ slug: 'aktuality/', label: 'Aktuality' },
-	{ slug: 'video/', label: 'Video' },
-	{ slug: 'kostovy-verse/', label: 'Kosťovy verše' },
-	{ slug: 'veroniccinypisne/', label: 'Veroniččiny písně' },
-	{ slug: 'horoskop/', label: 'Kosťův horoskop' },
+	{ slug: '', label: copy.nav.home },
+	{ slug: 'aktuality/', label: copy.nav.aktuality },
+	{ slug: 'kostovy-verse/', label: copy.nav.kostovyVerse },
+	{ slug: 'veronicina-tvorba/', label: copy.nav.veronicinaTvorba },
+	{ slug: 'horoskop/', label: copy.nav.horoskop },
 ];
+
+const toggleHref = toggleHrefOverride ?? `${base}${other}/${section}`;
 ---
 
 <header class="site-header">
 	<div class="container inner">
-		<a class="logo" href={base}>{SITE_NAME}</a>
-		<nav aria-label="Hlavní navigace">
+		<a class="logo" href={`${base}${lang}/`}>{siteName}</a>
+		<nav aria-label={lang === 'cs' ? 'Hlavní navigace' : 'Main navigation'}>
 			{
 				NAV.map((item) => (
-					<a href={`${base}${item.slug}`} aria-current={section === item.slug ? 'page' : undefined}>
+					<a href={`${base}${lang}/${item.slug}`} aria-current={section === item.slug ? 'page' : undefined}>
 						{item.label}
 					</a>
 				))
 			}
+			<a class="lang-toggle" href={toggleHref} hreflang={other}>
+				{copy.nav.langToggleTo}
+			</a>
 		</nav>
 	</div>
 </header>
@@ -55,6 +65,7 @@ const NAV = [
 	}
 	nav {
 		display: flex;
+		align-items: center;
 		gap: 18px;
 		flex-wrap: wrap;
 	}
@@ -74,5 +85,14 @@ const NAV = [
 	nav a[aria-current='page'] {
 		color: var(--teal);
 		border-bottom-color: var(--teal);
+	}
+	.lang-toggle {
+		color: var(--ink-soft);
+		border: 1px solid var(--rule);
+		padding: 3px 8px;
+	}
+	.lang-toggle:hover {
+		color: var(--teal);
+		border-color: var(--teal);
 	}
 </style>

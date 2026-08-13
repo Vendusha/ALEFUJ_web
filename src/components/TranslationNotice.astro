@@ -1,0 +1,28 @@
+---
+import { t, type Locale } from '../lib/i18n';
+
+interface Props {
+	/** The language the reader requested via the URL. */
+	requestedLang: Locale;
+	/** The language the content is actually being shown in. */
+	shownLang: Locale;
+}
+
+const { requestedLang, shownLang } = Astro.props;
+const copy = t(requestedLang).translationNotice;
+const message = shownLang === 'cs' ? copy.onlyInCzech : copy.onlyInEnglish;
+---
+
+<p class="notice">{message}</p>
+
+<style>
+	.notice {
+		display: inline-block;
+		font-family: var(--font-mono);
+		font-size: 13px;
+		color: var(--ink-soft);
+		border: 1px solid var(--rule);
+		padding: 8px 14px;
+		margin-bottom: 2em;
+	}
+</style>
