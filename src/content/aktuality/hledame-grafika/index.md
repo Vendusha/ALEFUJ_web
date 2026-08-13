@@ -1,5 +1,5 @@
 ---
-title: "Obálka má finální podobu"
+title: "Hledáme grafika obálky."
 date: 2026-06-02
 lang: cs
 translationKey: "hledame-grafika"
