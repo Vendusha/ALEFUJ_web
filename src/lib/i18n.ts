@@ -5,12 +5,14 @@ export const defaultLocale: Locale = 'cs';
 export const siteName = 'ALEFUJ!';
 
 // "ALEFUJ! novinky" list on MailerLite (a separate provider/account from
-// vendulasubert.cz's Ecomail newsletter). This is the bare JSONP "subscribe"
-// action URL with no `callback` param, so a plain (no-JS) form POST to it
-// gets a normal HTML response back rather than a JSONP-wrapped one — see
-// src/components/Newsletter.astro for how that's used with target="_blank".
+// vendulasubert.cz's Ecomail newsletter — and a separate form/list from
+// vendulasubert.cz's own MailerLite form, despite sharing an account id).
+// This is the bare JSONP "subscribe" action URL with no `callback` param,
+// so a plain (no-JS) form POST to it gets a normal HTML response back
+// rather than a JSONP-wrapped one — see src/components/Newsletter.astro
+// for how that's used with the hidden-iframe submit pattern.
 export const MAILERLITE_ALEFUJ_FORM_ENDPOINT =
-	'https://assets.mailerlite.com/jsonp/2569527/forms/195688903656604820/subscribe';
+	'https://assets.mailerlite.com/jsonp/2569527/forms/195688773516789161/subscribe';
 
 interface Translations {
 	nav: {
@@ -65,9 +67,7 @@ interface Translations {
 	};
 	horoskop: {
 		heading: string;
-		archiveEyebrow: string;
-		archiveHeading: string;
-		archiveEmpty: string;
+		otherSignsHeading: string;
 		loading: string;
 		fallback: string;
 		czechOnlyNote: string;
@@ -138,13 +138,11 @@ export const translations: Record<Locale, Translations> = {
 		},
 		horoskop: {
 			heading: 'Kosťův horoskop',
-			archiveEyebrow: 'Archiv',
-			archiveHeading: 'Předchozí měsíce',
-			archiveEmpty: 'Archiv se teprve buduje.',
+			otherSignsHeading: 'Ostatní znamení',
 			loading: 'Horoskop se načítá…',
-			fallback: 'Kosťův horoskop na tento měsíc se připravuje.',
+			fallback: 'Kosťův horoskop pro toto znamení se připravuje.',
 			czechOnlyNote:
-				'Kosťa, jeden z vypravěčů knihy, píše horoskop ozdobnou, záměrně archaickou češtinou, kterou překlad nepřežije, pročež zůstává v originále. Jde o suché, nijak zvlášť lichotivé měsíční čtení pro všech dvanáct znamení.',
+				'Kosťa, jeden z vypravěčů knihy, píše horoskop ozdobnou, záměrně archaickou češtinou, kterou překlad nepřežije, pročež zůstává v originále. Jde o suché, nijak zvlášť lichotivé čtení pro všech dvanáct znamení.',
 		},
 	},
 	en: {
@@ -211,13 +209,11 @@ export const translations: Record<Locale, Translations> = {
 		},
 		horoskop: {
 			heading: "Kosťa's Horoscope",
-			archiveEyebrow: 'Archive',
-			archiveHeading: 'Previous months',
-			archiveEmpty: 'The archive is still being built up.',
+			otherSignsHeading: 'Other signs',
 			loading: 'Loading horoscope…',
-			fallback: "Kosťa's horoscope for this month is still being written.",
+			fallback: "Kosťa's horoscope for this sign is still being written.",
 			czechOnlyNote:
-				"Kosťa, one of the book's narrators, writes this month's horoscope in an ornate, deliberately old-fashioned Czech that doesn't survive translation, so it stays in the original below. It's a dry, not-especially-flattering monthly reading for all twelve signs.",
+				"Kosťa, one of the book's narrators, writes this horoscope in an ornate, deliberately old-fashioned Czech that doesn't survive translation, so it stays in the original below. It's a dry, not-especially-flattering read for all twelve signs.",
 		},
 	},
 };

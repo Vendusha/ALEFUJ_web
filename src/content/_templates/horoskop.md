@@ -1,33 +1,18 @@
 ---
-# Číslo měsíce 1–12 (1 = leden, 12 = prosinec). Podle TOHOTO čísla web pozná,
-# který horoskop má na dané návštěvě ukázat – ne podle názvu souboru.
-month: 1
-# Všech 12 znamení musí být vyplněných, jinak se stránka nepostaví (build
-# spadne s chybou, která přesně řekne, co chybí). Pořadí znamení níže
-# nemusíš dodržet, ale musí být přítomna všechna – neměň hodnoty "sign:".
-signs:
-  - sign: beran
-    text: "Text pro Berana – dvě až tři věty, tón viz README."
-  - sign: byk
-    text: "Text pro Býka."
-  - sign: blizenci
-    text: "Text pro Blížence."
-  - sign: rak
-    text: "Text pro Raka."
-  - sign: lev
-    text: "Text pro Lva."
-  - sign: panna
-    text: "Text pro Pannu."
-  - sign: vahy
-    text: "Text pro Váhy."
-  - sign: stir
-    text: "Text pro Štíra."
-  - sign: strelec
-    text: "Text pro Střelce."
-  - sign: kozoroh
-    text: "Text pro Kozoroha."
-  - sign: vodnar
-    text: "Text pro Vodnáře."
-  - sign: ryby
-    text: "Text pro Ryby."
+# Musí být jedna z dvanácti hodnot beze změny: beran, byk, blizenci, rak,
+# lev, panna, vahy, stir, strelec, kozoroh, vodnar, ryby. Tenhle klíč, ne
+# název souboru, je to, podle čeho web pozná, ke kterému znamení text patří.
+sign: beran
+# Nepovinné: krátká ukázka pro dlaždici v mřížce (~20–25 slov). Pokud ho
+# vynecháš, web si ho sám vytvoří z první věty hlavního odstavce níže.
+# excerpt: "Krátká ukázka pro náhledovou dlaždici."
+# Nepovinné: dej "true", pokud text pro tohle znamení ještě není hotový.
+# Stránka pak místo něj (jen když je to znamení zrovna "v sezóně") ukáže
+# zdvořilou zprávu, že se horoskop připravuje, místo rozepsaného textu.
+# draft: true
 ---
+
+Sem napiš hlavní odstavec horoskopu pro toto znamení.
+
+*A sem (na samostatný odstavec, celý v kurzívě pomocí hvězdiček) volitelnou
+ironickou poznámku na okraj — jiný, věcnější rejstřík než horoskop samotný.*

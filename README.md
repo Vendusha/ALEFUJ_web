@@ -8,7 +8,7 @@ Marketing/update site for the comic novel **ALEFUJ!** by Vendula Maulerová — 
 
 ## How to update this site
 
-Written for future-you, having forgotten all of this. Three things you'll routinely do: write an Aktualita, add a month to the horoscope, and publish. No terminal, no GitHub Desktop — everything below uses VS Code's built-in panels, plus a browser fallback if you're away from your laptop.
+Written for future-you, having forgotten all of this. Two things you'll routinely do: write an Aktualita and publish. No terminal, no GitHub Desktop — everything below uses VS Code's built-in panels, plus a browser fallback if you're away from your laptop.
 
 If you get properly stuck, you can also just ask Claude Code (or another AI coding assistant) to do any of this for you — describe what you want in plain language ("add a new Aktualita about X") and point it at this repo.
 
@@ -22,18 +22,7 @@ If you get properly stuck, you can also just ask Claude Code (or another AI codi
 
 **Translating a post:** a translation is a *second, separate* post file, not a second language inside the same file. Do everything above again with `lang: en` (or `lang: cs`) in a new folder, then give **both** files the same `translationKey` value in the frontmatter (anything you like, as long as it's identical in both) — the language toggle in the header will then jump straight between them instead of falling back to the Aktuality list. Not every post needs a translation; an Aktualita with no sibling in the other language just doesn't show up in that language's list.
 
-### 2. Add a new monthly horoscope entry
-
-Horoscope entries don't need scheduling or a script — the page reads the visitor's own device date in the browser and shows whichever month's entry matches. You just need the entry to exist before that month comes around.
-
-1. Open `src/content/_templates/horoskop.md`, copy it.
-2. Paste it into `src/content/horoskop/`, then rename the pasted copy to `NN-mesic.md` (two-digit month + Czech month name), e.g. `09-zari.md` for September. The filename is just for you browsing the folder — the page actually goes by the `month:` number inside the file, so double-check that number matches.
-3. Fill in all 12 signs under `signs:` — the site refuses to build if any are missing (better a build error than a horoscope that silently skips a sign). Keep Kosťa's voice: ornate, formal Czech, dry self-deprecating irony, connectives like *nýbrž*, *pročež*, *načež*, *neboť*.
-4. Save, then publish. You can write and commit a whole year's worth of these in one sitting whenever you have time — nothing needs to happen "on" the month itself.
-
-The horoscope page also shows a small **archive** of every other month you've already written, so old entries never disappear as you add new ones. The horoscope is Czech-only by design (see "Bilingual" below) — there's nothing to translate here, ever.
-
-### 3. Publish (go live)
+### 2. Publish (go live)
 
 1. Open the **Source Control** panel: click its icon in the Activity Bar, or press `Ctrl+Shift+G`.
 2. Under **Changes**, you'll see your new/edited files listed.
@@ -51,7 +40,7 @@ That's the whole loop, every time: **write/edit in VS Code → Source Control pa
 
 **Editing an existing file:** go to the file on github.com, click the pencil (✏️) icon, edit, then scroll down to **Commit changes → Commit directly to the `main` branch**.
 
-**Creating a new Aktualita or horoscope entry:** navigate into `src/content/aktuality/` or `src/content/horoskop/`, click **Add file → Create new file**, type the new path in one go (e.g. `2026-09-03-nazev-aktuality/index.md` — GitHub creates the folder automatically), paste in the contents of the matching template from `src/content/_templates/`, and commit.
+**Creating a new Aktualita:** navigate into `src/content/aktuality/`, click **Add file → Create new file**, type the new path in one go (e.g. `2026-09-03-nazev-aktuality/index.md` — GitHub creates the folder automatically), paste in the contents of `src/content/_templates/aktualita/index.md`, and commit.
 
 **Adding a photo:** navigate into the post's folder, **Add file → Upload files**, commit.
 
@@ -72,10 +61,11 @@ The site frame (navigation, buttons, dates, the homepage opening/status text, cr
 
 Edit both language files together when you change either — if one is missing, the page automatically falls back to showing the other with a small "only available in [language]" note, so it degrades gracefully rather than breaking, but that's a fallback, not something to rely on.
 
-## The other two sections
+## The other three sections
 
-These change far less often, so they're not part of the routine loop above, but here's how they work when you do need them. Both are Czech-only (see "Bilingual" above) — there's no `lang` field to fill in.
+These change far less often, so they're not part of the routine loop above, but here's how they work when you do need them. All three are Czech-only (see "Bilingual" above) — there's no `lang` field to fill in.
 
+- **Kosťův horoskop** (`src/content/horoskop/`) — exactly 12 files, one per zodiac sign, forever: `beran.md`, `byk.md`, `blizenci.md`, `rak.md`, `lev.md`, `panna.md`, `vahy.md`, `stir.md`, `strelec.md`, `kozoroh.md`, `vodnar.md`, `ryby.md`. There's no month field and nothing to add — you write each sign once and edit it occasionally if you want. The page works out which sign is "in season" from standard zodiac date ranges, read from the visitor's own device (client-side, no server, no scheduled rebuild), and shows it full-size up top with the other 11 as click-to-expand tiles below. To edit a sign, open its file directly — no template-copying needed since the file already exists. The horoscope text is the markdown body (not a frontmatter field), so the trailing italicized aside (`*...*`) renders as real italics. `excerpt` in the frontmatter is optional — leave it out and the preview tile auto-generates one from the first sentence of the body. If a sign's file is ever deleted, or you set `draft: true` on it, the page treats it as not-yet-written and shows a graceful "still being prepared" message in the featured slot instead of blank or draft text — the other 11 tiles keep working regardless.
 - **Kosťovy verše** (`src/content/kostovy-verse/`) — one folder per poem, same page-bundle pattern as Aktuality. Copy `src/content/_templates/kostuv-vers/index.md`. `productType` must be exactly `kapesnik` or `toaletak`. `status` should stay `coming-soon` until there's an actual Hithit campaign to link to — that's the only status this field supports right now, on purpose, so nothing here can accidentally look like a working checkout.
 - **Veroničina tvorba** (`src/content/veronicina-tvorba/`) — Veronika's poems and songs together, one flat file per entry, no folder needed. Copy `src/content/_templates/veronicina-tvorba.md`. `typ` must be exactly `basen` or `pisen` — it controls which group (Básně / Písně) the entry is shown under. `youtubeId` is optional (skip it for poems, or for songs not yet recorded) — when present, it's just the ID portion of the YouTube URL (`youtube.com/watch?v=`**`THIS_PART`**). There's no separate Video page anymore; a video belongs next to the song it's for.
 
@@ -87,7 +77,7 @@ src/
     _templates/              ← copy from here, never published (outside every collection's own folder)
       aktualita/index.md, horoskop.md, kostuv-vers/index.md, veronicina-tvorba.md
     aktuality/<date-slug>/index.md      ← update posts, page-bundle (post + its own images), bilingual
-    horoskop/NN-mesic.md                ← one file per calendar month, `month:` field drives display, Czech-only
+    horoskop/<sign>.md                  ← exactly 12 files, one per zodiac sign forever, Czech-only
     kostovy-verse/<slug>/index.md       ← Kosťa's poems, page-bundle, Czech-only
     veronicina-tvorba/<slug>.md         ← Veronika's poems + songs, flat file, Czech-only
     pages/<section>/<lang>/index.md     ← bilingual prose: home/{cs,en}, credits/{cs,en}
@@ -95,9 +85,10 @@ src/
   assets/ilustrace/          ← cover art, house-sketch accents, the 45 hand-drawn vignettes
   lib/
     i18n.ts                  ← UI strings (nav, footer, page chrome) in both languages, MailerLite endpoint
-    site.ts                  ← Czech-only display labels (zodiac signs, months, kapesník/toaleťák)
+    site.ts                  ← Czech-only display labels (zodiac signs, kapesník/toaleťák)
     pages.ts                 ← loads a `pages` entry with cs/en fallback (never a 404 or empty page)
     aktuality.ts              ← per-language Aktuality queries + translation-sibling lookup
+    horoskop.ts               ← zodiac date-range → featured sign, excerpt auto-generation
   layouts/Layout.astro       ← shared HTML shell: fonts, Header, Footer, OG meta tags
   components/                 ← Header (nav + language toggle), Footer, Newsletter, TranslationNotice, CzechOnlyNotice
   pages/
@@ -107,7 +98,7 @@ src/
     [lang]/aktuality/[slug].astro        ← a single Aktualita
     [lang]/kostovy-verse/index.astro     ← Kosťovy verše showcase
     [lang]/veronicina-tvorba/index.astro ← Veroničina tvorba (poems + songs, grouped)
-    [lang]/horoskop/index.astro          ← Kosťův horoskop (client-side month detection + archive)
+    [lang]/horoskop/index.astro          ← Kosťův horoskop (client-side "in season" sign, expandable tiles for the rest)
 .github/workflows/deploy.yml  ← builds and deploys to GitHub Pages on push to main
 ```
 

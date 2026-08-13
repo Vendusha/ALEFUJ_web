@@ -1,8 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
 import CzechOnlyNotice from '../../../components/CzechOnlyNotice.astro';
-import { MONTH_LABELS, ZODIAC_SIGN_LABELS } from '../../../lib/site';
+import { ZODIAC_SIGNS } from '../../../content.config';
+import { ZODIAC_SIGN_LABELS } from '../../../lib/site';
+import { getFirstParagraph, autoExcerpt } from '../../../lib/horoskop';
 import { t, locales, type Locale } from '../../../lib/i18n';
 
 export function getStaticPaths() {
@@ -12,27 +14,27 @@ export function getStaticPaths() {
 const lang = Astro.params.lang as Locale;
 const copy = t(lang).horoskop;
 
+const PLACEHOLDER_TEXT = '[doplním]';
+
 const entries = await getCollection('horoskop');
+const bySign = new Map(entries.map((e) => [e.data.sign, e]));
 
-// Serialized once at build time and read by the client script below, which
-// picks the right month using the *visitor's* local date — there is no
-// server and no scheduled rebuild, so the "rotation" has to happen in the
-// browser at request time. The horoscope text itself is Czech-only (see
-// CzechOnlyNotice below), so this never changes with `lang`.
-const horoscopeData = entries
-	.sort((a, b) => a.data.month - b.data.month)
-	.map((entry) => ({
-		month: entry.data.month,
-		label: MONTH_LABELS[entry.data.month],
-		signs: entry.data.signs.map((s) => ({
-			sign: s.sign,
-			label: ZODIAC_SIGN_LABELS[s.sign],
-			text: s.text,
-		})),
-	}));
-
-// `</script>` inside the JSON would otherwise terminate the tag early.
-const safeJson = JSON.stringify(horoscopeData).replace(/</g, '\\u003c');
+// One entry per sign in canonical order, whether or not a real file exists
+// for it yet — a missing file is treated the same as an explicit
+// `draft: true` (see the schema comment in content.config.ts), so the page
+// always builds with all twelve slots present.
+const signs = await Promise.all(
+	ZODIAC_SIGNS.map(async (sign) => {
+		const label = ZODIAC_SIGN_LABELS[sign];
+		const entry = bySign.get(sign);
+		if (!entry || entry.data.draft) {
+			return { sign, label, isDraft: true as const, excerpt: PLACEHOLDER_TEXT };
+		}
+		const { Content } = await render(entry);
+		const excerpt = entry.data.excerpt ?? autoExcerpt(getFirstParagraph(entry.body ?? ''));
+		return { sign, label, isDraft: false as const, excerpt, Content };
+	}),
+);
 ---
 
 <Layout lang={lang} section="horoskop/" title={copy.heading} description={copy.heading}>
@@ -41,174 +43,174 @@ const safeJson = JSON.stringify(horoscopeData).replace(/</g, '\\u003c');
 			<p class="section-label" style="color: var(--lime);">Sešit č. 7</p>
 			<h2>{copy.heading}</h2>
 			{lang === 'en' && <CzechOnlyNotice message={copy.czechOnlyNote} />}
-			<div id="current-horoscope">
+			<div id="featured-horoscope">
 				<p class="loading">{copy.loading}</p>
+				{
+					signs.map((s) => {
+						const Content = 'Content' in s ? s.Content : undefined;
+						return (
+							<article class="featured-entry" data-sign={s.sign} hidden>
+								<p class="featured-sign-label">{s.label}</p>
+								{s.isDraft || !Content ? (
+									<p class="fallback">{copy.fallback}</p>
+								) : (
+									<div class="prose">
+										<Content />
+									</div>
+								)}
+							</article>
+						);
+					})
+				}
 			</div>
 		</div>
 	</section>
 
 	<section class="panel panel-cream">
 		<div class="container">
-			<p class="section-label">{copy.archiveEyebrow}</p>
-			<h3 id="archive-heading" hidden>{copy.archiveHeading}</h3>
-			<div id="archive-list"></div>
+			<p class="section-label">{copy.otherSignsHeading}</p>
+			<div class="signs-grid" id="signs-grid">
+				{
+					signs.map((s) => {
+						const Content = 'Content' in s ? s.Content : undefined;
+						return (
+							<div class="sign-tile" data-sign={s.sign}>
+								<button class="tile-toggle" type="button" aria-expanded="false">
+									<h3>{s.label}</h3>
+									<p class="excerpt">{s.excerpt}</p>
+								</button>
+								<div class="tile-full prose" hidden>
+									{s.isDraft || !Content ? <p>{copy.fallback}</p> : <Content />}
+								</div>
+							</div>
+						);
+					})
+				}
+			</div>
 		</div>
 	</section>
 </Layout>
 
-<script type="application/json" id="horoscope-data" is:inline set:html={safeJson} />
-<script type="application/json" id="horoscope-strings" is:inline set:html={JSON.stringify({ fallback: copy.fallback, archiveEmpty: copy.archiveEmpty })} />
-
 <script>
-	interface Sign {
-		sign: string;
-		label: string;
-		text: string;
-	}
-	interface Entry {
-		month: number;
-		label: string;
-		signs: Sign[];
-	}
+	import { getFeaturedSign } from '../../../lib/horoskop';
 
-	function signsGrid(signs: Sign[]): HTMLDivElement {
-		const grid = document.createElement('div');
-		grid.className = 'signs-grid';
-		for (const s of signs) {
-			const card = document.createElement('div');
-			card.className = 'sign-card';
-			const h4 = document.createElement('h4');
-			h4.textContent = s.label;
-			const p = document.createElement('p');
-			p.textContent = s.text;
-			card.append(h4, p);
-			grid.append(card);
-		}
-		return grid;
+	function initFeatured() {
+		const container = document.getElementById('featured-horoscope');
+		if (!container) return;
+		const loading = container.querySelector('.loading');
+
+		const sign = getFeaturedSign(new Date());
+
+		const entry = container.querySelector<HTMLElement>(`.featured-entry[data-sign="${sign}"]`);
+		if (entry) entry.hidden = false;
+		loading?.remove();
+
+		// The featured sign's own tile is already shown in full above —
+		// don't show it a second time in the grid below.
+		const tile = document.querySelector<HTMLElement>(`.sign-tile[data-sign="${sign}"]`);
+		if (tile) tile.hidden = true;
 	}
 
-	function init() {
-		const dataEl = document.getElementById('horoscope-data');
-		const stringsEl = document.getElementById('horoscope-strings');
-		const currentEl = document.getElementById('current-horoscope');
-		const archiveList = document.getElementById('archive-list');
-		const archiveHeading = document.getElementById('archive-heading');
-		if (!dataEl || !stringsEl || !currentEl || !archiveList || !archiveHeading) return;
-
-		const entries: Entry[] = JSON.parse(dataEl.textContent || '[]');
-		const strings: { fallback: string; archiveEmpty: string } = JSON.parse(stringsEl.textContent || '{}');
-		const currentMonth = new Date().getMonth() + 1;
-		const current = entries.find((e) => e.month === currentMonth);
-
-		currentEl.innerHTML = '';
-		if (current) {
-			const heading = document.createElement('p');
-			heading.className = 'current-month';
-			heading.textContent = current.label;
-			currentEl.append(heading, signsGrid(current.signs));
-		} else {
-			const fallback = document.createElement('p');
-			fallback.className = 'fallback';
-			fallback.textContent = strings.fallback;
-			currentEl.append(fallback);
-		}
-
-		const archived = entries.filter((e) => e.month !== currentMonth);
-		if (archived.length > 0) {
-			archiveHeading.hidden = false;
-			for (const entry of archived) {
-				const details = document.createElement('details');
-				details.className = 'archive-entry';
-				const summary = document.createElement('summary');
-				summary.textContent = entry.label;
-				details.append(summary, signsGrid(entry.signs));
-				archiveList.append(details);
-			}
-		} else {
-			const note = document.createElement('p');
-			note.className = 'archive-empty';
-			note.textContent = strings.archiveEmpty;
-			archiveList.append(note);
-		}
+	function initAccordion() {
+		document.querySelectorAll<HTMLButtonElement>('.tile-toggle').forEach((btn) => {
+			btn.addEventListener('click', () => {
+				const full = btn.closest('.sign-tile')?.querySelector<HTMLElement>('.tile-full');
+				if (!full) return;
+				const expanded = btn.getAttribute('aria-expanded') === 'true';
+				btn.setAttribute('aria-expanded', String(!expanded));
+				full.hidden = expanded;
+			});
+		});
 	}
 
-	init();
+	initFeatured();
+	initAccordion();
 </script>
 
-<style is:global>
-	/* is:global — the sign cards below are built by the client script at
-	   runtime, so they never get Astro's scoped data-attribute; scoped
-	   styles would silently fail to match them. */
+<style>
 	.loading,
 	.fallback {
 		color: #dce7de;
 		font-style: italic;
 	}
-	.current-month {
+	.featured-sign-label {
 		font-family: var(--font-mono);
 		font-size: 13px;
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 		color: var(--lime);
-		margin: 0 0 20px;
+		margin: 0 0 16px;
 	}
+	#featured-horoscope :global(.prose) {
+		max-width: 68ch;
+	}
+	#featured-horoscope :global(.prose p) {
+		color: #eef4ee;
+		font-size: 17px;
+	}
+	/* The trailing italicized aside is a whole paragraph that's entirely
+	   emphasis — a different, more footnote-like register than the main
+	   horoscope text, so it gets its own quieter treatment. */
+	#featured-horoscope :global(.prose p:has(> em:only-child)) {
+		margin-top: 1.6em;
+		padding-top: 1.2em;
+		border-top: 1px dashed rgba(215, 222, 92, 0.4);
+		font-size: 15px;
+		color: #b9c9bb;
+	}
+
 	.signs-grid {
 		display: grid;
 		gap: 18px;
-		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+		margin-top: 30px;
 	}
-	.panel-teal .sign-card {
-		border: 1px dashed var(--paper);
-		padding: 16px 18px;
-	}
-	.sign-card h4 {
-		font-family: var(--font-display);
-		font-size: 16px;
-		margin: 0 0 8px;
-		color: var(--lime);
-	}
-	.panel-cream .sign-card h4 {
-		color: var(--teal);
-	}
-	.sign-card p {
-		margin: 0;
-		font-size: 14px;
-		line-height: 1.6;
-	}
-	.panel-teal .sign-card p {
-		color: #dfeee0;
-	}
-	.panel-cream .sign-card p {
-		color: var(--ink-soft);
-	}
-	#archive-heading {
-		font-size: 15px;
-		font-family: var(--font-mono);
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
-		color: var(--ink-soft);
-		margin-top: 0;
-	}
-	.archive-entry {
-		border-bottom: 1px solid var(--rule);
-		padding: 16px 0;
-	}
-	.archive-entry summary {
-		cursor: pointer;
-		font-family: var(--font-display);
-		font-weight: 600;
-		font-size: 18px;
-		text-transform: capitalize;
-	}
-	.archive-entry .signs-grid {
-		margin-top: 18px;
-	}
-	.panel-cream .sign-card {
+	.sign-tile {
 		background: var(--paper-soft);
 		border: 1px solid var(--rule);
 	}
-	.archive-empty {
+	.tile-toggle {
+		display: block;
+		width: 100%;
+		text-align: left;
+		background: none;
+		border: none;
+		padding: 18px 20px;
+		cursor: pointer;
+		font: inherit;
+		color: inherit;
+	}
+	.tile-toggle h3 {
+		font-family: var(--font-display);
+		font-size: 17px;
+		margin: 0 0 8px;
+		color: var(--teal);
+	}
+	.tile-toggle .excerpt {
+		margin: 0;
+		font-size: 14px;
 		color: var(--ink-soft);
-		font-style: italic;
+		line-height: 1.6;
+	}
+	.tile-toggle[aria-expanded='true'] h3 {
+		color: var(--ink);
+	}
+	.tile-toggle[aria-expanded='true'] .excerpt {
+		display: none;
+	}
+	.tile-full {
+		padding: 0 20px 20px;
+	}
+	.tile-full :global(p) {
+		font-size: 15px;
+		color: var(--ink-soft);
+		line-height: 1.65;
+	}
+	.tile-full :global(p:has(> em:only-child)) {
+		margin-top: 1.4em;
+		padding-top: 1em;
+		border-top: 1px dashed var(--rule);
+		font-size: 13.5px;
+		font-style: normal;
 	}
 </style>

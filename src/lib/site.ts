@@ -17,21 +17,6 @@ export const ZODIAC_SIGN_LABELS: Record<string, string> = {
 	ryby: 'Ryby',
 };
 
-export const MONTH_LABELS: Record<number, string> = {
-	1: 'leden',
-	2: 'únor',
-	3: 'březen',
-	4: 'duben',
-	5: 'květen',
-	6: 'červen',
-	7: 'červenec',
-	8: 'srpen',
-	9: 'září',
-	10: 'říjen',
-	11: 'listopad',
-	12: 'prosinec',
-};
-
 export const PRODUCT_TYPE_LABELS: Record<string, string> = {
 	kapesnik: 'kapesník',
 	toaletak: 'toaleťák',
