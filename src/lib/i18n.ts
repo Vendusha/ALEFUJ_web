@@ -37,6 +37,7 @@ interface Translations {
 		emailLabel: string;
 		emailPlaceholder: string;
 		submitLabel: string;
+		successMessage: string;
 		copyright: string;
 	};
 	translationNotice: {
@@ -108,6 +109,7 @@ export const translations: Record<Locale, Translations> = {
 			emailLabel: 'E-mail',
 			emailPlaceholder: 'váš e-mail',
 			submitLabel: 'Přihlásit se',
+			successMessage: 'Díky! Zkontrolujte e-mail a potvrďte přihlášení k odběru.',
 			copyright: 'Vendula Maulerová',
 		},
 		translationNotice: {
@@ -179,6 +181,7 @@ export const translations: Record<Locale, Translations> = {
 			emailLabel: 'Email',
 			emailPlaceholder: 'your email',
 			submitLabel: 'Subscribe',
+			successMessage: 'Thanks! Check your email to confirm your subscription.',
 			copyright: 'Vendula Maulerová',
 		},
 		translationNotice: {

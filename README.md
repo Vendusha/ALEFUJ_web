@@ -113,7 +113,7 @@ src/
 
 ### The newsletter endpoint
 
-The footer (and homepage) newsletter form (`src/components/Newsletter.astro`) posts straight to the "ALEFUJ! novinky" list on MailerLite — `MAILERLITE_ALEFUJ_FORM_ENDPOINT` in `src/lib/i18n.ts` (a different provider/account from vendulasubert.cz's Ecomail newsletter). It's a plain HTML form POST, no JavaScript embed or tracking script from MailerLite — `target="_blank"` is what lets the confirmation ("check your email") page open without needing JS, while keeping the visitor on this site in the original tab. If the form ever needs to move to a different MailerLite list or account, that's the one constant to update; nothing else in the form needs to change.
+The footer (and homepage) newsletter form (`src/components/Newsletter.astro`) posts straight to the "ALEFUJ! novinky" list on MailerLite — `MAILERLITE_ALEFUJ_FORM_ENDPOINT` in `src/lib/i18n.ts` (a different provider/account from vendulasubert.cz's Ecomail newsletter). It's a plain HTML form POST, no JavaScript embed or tracking script from MailerLite. The form's `target` is a same-page hidden `<iframe>` rather than a new tab, so the visitor never leaves the page; a small vanilla-JS snippet in the same component swaps the form for a "check your email" message once that iframe finishes loading. That swap fires on the iframe *loading*, not on a confirmed-accepted response (can't be read cross-origin), so a genuinely malformed submission would still show success — an accepted tradeoff for a simple signup form. If the form ever needs to move to a different MailerLite list or account, `MAILERLITE_ALEFUJ_FORM_ENDPOINT` is the one constant to update.
 
 ## Commands
 

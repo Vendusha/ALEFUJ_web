@@ -11,7 +11,10 @@ interface Props {
 
 const { lang, variant = 'teal', id } = Astro.props;
 const copy = t(lang).footer;
-const inputId = `newsletter-email-${lang}-${variant}`;
+const uid = `${lang}-${variant}`;
+const inputId = `newsletter-email-${uid}`;
+const iframeName = `hidden-iframe-newsletter-${uid}`;
+const successId = `newsletter-success-${uid}`;
 ---
 
 <div id={id} class:list={['newsletter', variant]}>
@@ -19,16 +22,26 @@ const inputId = `newsletter-email-${lang}-${variant}`;
 	<p>{copy.newsletterBody}</p>
 	<!--
 		Plain HTML form POST to MailerLite's "subscribe" endpoint — no JS embed,
-		no tracking script. `fields[email]` is MailerLite's required field
-		naming for this endpoint. `ml-submit` marks it as a real form submission
-		(matches MailerLite's own non-JS embed code). `target="_blank"` is what
-		makes this work without JavaScript while not navigating the visitor away
-		from this page: the browser opens MailerLite's own hosted response page
-		in a new tab, which — since double opt-in is on for this list — tells
-		them to check their email for the confirmation link. That page is
-		controlled in the MailerLite dashboard, not in this repo.
+		no tracking script from MailerLite. `fields[email]` is MailerLite's
+		required field naming for this endpoint; `ml-submit` marks it as a real
+		form submission (matches MailerLite's own non-JS embed code).
+
+		The form's target is a hidden same-page <iframe> rather than a new tab,
+		so the visitor never leaves this page. The vanilla-JS snippet at the
+		bottom of this file swaps the form for a success message once that
+		iframe finishes loading. Because the iframe's response is cross-origin,
+		the script can't actually read whether MailerLite accepted the email —
+		it shows success as soon as the iframe loads, not on confirmed success.
+		Acceptable tradeoff for a simple signup form; a genuinely malformed
+		submission would still show this message.
 	-->
-	<form class="newsletter-form" action={MAILERLITE_ALEFUJ_FORM_ENDPOINT} method="post" target="_blank">
+	<form
+		class="newsletter-form"
+		action={MAILERLITE_ALEFUJ_FORM_ENDPOINT}
+		method="post"
+		target={iframeName}
+		data-success-id={successId}
+	>
 		<input type="hidden" name="ml-submit" value="1" />
 		<label for={inputId}>{copy.emailLabel}</label>
 		<div class="row">
@@ -36,7 +49,34 @@ const inputId = `newsletter-email-${lang}-${variant}`;
 			<button type="submit">{copy.submitLabel}</button>
 		</div>
 	</form>
+	<iframe name={iframeName} class="hidden-iframe" title="newsletter" tabindex="-1" aria-hidden="true"></iframe>
+	<p id={successId} class="newsletter-success" hidden>{copy.successMessage}</p>
 </div>
+
+<script>
+	// One shared script handles every Newsletter instance on the page (Astro
+	// only inlines this once even though the component renders multiple
+	// times — footer + inline home, currently) by reading each form's own
+	// target/success-id rather than hardcoding a single id.
+	document.querySelectorAll<HTMLFormElement>('.newsletter-form').forEach((form) => {
+		const iframeName = form.getAttribute('target');
+		const successId = form.dataset.successId;
+		const iframe = iframeName && document.querySelector<HTMLIFrameElement>(`iframe[name="${iframeName}"]`);
+		const successEl = successId && document.getElementById(successId);
+		if (!iframe || !successEl) return;
+
+		form.addEventListener('submit', () => {
+			iframe.addEventListener(
+				'load',
+				() => {
+					form.hidden = true;
+					successEl.hidden = false;
+				},
+				{ once: true },
+			);
+		});
+	});
+</script>
 
 <style>
 	.newsletter {
@@ -123,5 +163,24 @@ const inputId = `newsletter-email-${lang}-${variant}`;
 	.newsletter.cream .row button:hover {
 		background: var(--ink);
 		border-color: var(--ink);
+	}
+	.hidden-iframe {
+		display: none;
+	}
+	.newsletter-success {
+		font-family: var(--font-mono);
+		font-size: 14px;
+		max-width: 420px;
+		padding: 12px 14px;
+		border: 2px solid;
+		margin: 0;
+	}
+	.newsletter.teal .newsletter-success {
+		border-color: var(--lime);
+		color: var(--lime);
+	}
+	.newsletter.cream .newsletter-success {
+		border-color: var(--teal);
+		color: var(--teal);
 	}
 </style>
