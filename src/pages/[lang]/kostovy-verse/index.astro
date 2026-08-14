@@ -38,7 +38,6 @@ const poems = await getCollection('kostovyVerse');
 								<h3>{poem.data.title}</h3>
 								{poem.data.image && <Image class="poem-image" src={poem.data.image} alt="" width={320} />}
 								<p class="poem">{poem.data.text}</p>
-								<p class="note">{copy.hithitNote}</p>
 							</div>
 						))}
 					</div>
@@ -81,14 +80,6 @@ const poems = await getCollection('kostovyVerse');
 		color: #dfeee0;
 		font-style: italic;
 		line-height: 1.7;
-	}
-	.note {
-		font-family: var(--font-mono);
-		font-size: 11px;
-		color: var(--lime);
-		margin-top: 14px;
-		margin-bottom: 0;
-		text-transform: uppercase;
 	}
 	.seal {
 		position: absolute;

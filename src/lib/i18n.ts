@@ -17,7 +17,7 @@ export const MAILERLITE_ALEFUJ_FORM_ENDPOINT =
 interface Translations {
 	nav: {
 		home: string;
-		aktuality: string;
+		oKnize: string;
 		kostovyVerse: string;
 		veronicinaTvorba: string;
 		horoskop: string;
@@ -25,13 +25,11 @@ interface Translations {
 	};
 	home: {
 		heading: string;
+		oKnizeHeading: string;
 		readNowHeading: string;
 		readNowHoroskop: { title: string; desc: string };
 		readNowVerse: { title: string; desc: string };
 		readNowTvorba: { title: string; desc: string };
-		aktualityHeading: string;
-		aktualityAllLink: string;
-		aktualityEmpty: string;
 	};
 	footer: {
 		newsletterHeading: string;
@@ -46,15 +44,9 @@ interface Translations {
 		onlyInCzech: string;
 		onlyInEnglish: string;
 	};
-	aktuality: {
-		heading: string;
-		backLink: string;
-		empty: string;
-	};
 	kostovyVerse: {
 		heading: string;
 		intro: string;
-		hithitNote: string;
 		empty: string;
 		czechOnlyNote: string;
 	};
@@ -78,7 +70,7 @@ export const translations: Record<Locale, Translations> = {
 	cs: {
 		nav: {
 			home: 'Domů',
-			aktuality: 'Aktuality',
+			oKnize: 'O knize',
 			kostovyVerse: 'Kosťovy verše',
 			veronicinaTvorba: 'Veroničina tvorba',
 			horoskop: 'Kosťův horoskop',
@@ -86,6 +78,7 @@ export const translations: Record<Locale, Translations> = {
 		},
 		home: {
 			heading: 'Ahoj.',
+			oKnizeHeading: 'O knize',
 			readNowHeading: 'Co si tu teď můžete přečíst',
 			readNowHoroskop: {
 				title: 'Kosťův horoskop',
@@ -93,19 +86,17 @@ export const translations: Record<Locale, Translations> = {
 			},
 			readNowVerse: {
 				title: 'Kosťovy verše',
-				desc: 'Básně, které Kosťa vytvořil za účelem sezení na záchodě nebo za účelem smrkání.',
+				desc: 'Básně, které Kosťa píše na kapesníky a toaleťáky — aby se i tyhle činnosti mohly dělat kreativně.',
 			},
 			readNowTvorba: {
 				title: 'Veroničina tvorba',
 				desc: 'Veronika je jedna z vedlejších postav. Neustále vymýšlí básničky a písničky na ukulele a na klavír. Časem si možná dovolím některou z její tvorby zhudebnit jako interpret na YouTube.',
 			},
-			aktualityHeading: 'Aktuality',
-			aktualityAllLink: 'Všechny aktuality →',
-			aktualityEmpty: 'Zatím žádné aktuality.',
 		},
 		footer: {
-			newsletterHeading: 'ALEFUJ! novinky',
-			newsletterBody: 'Ať vám neuteče, až kniha vyjde. Žádný spam, jen upřímné novinky o knize.',
+			newsletterHeading: 'Chci dostat e-mail, až se spustí kampaň na Hithitu',
+			newsletterBody:
+				'Nebudeme vás zatěžovat přílišným množstvím informací. Dáme vědět krátce před začátkem kampaně, při ní a po ní — první e-mail od nás tedy dostanete až za několik měsíců.',
 			emailLabel: 'E-mail',
 			emailPlaceholder: 'váš e-mail',
 			submitLabel: 'Přihlásit se',
@@ -116,15 +107,9 @@ export const translations: Record<Locale, Translations> = {
 			onlyInCzech: 'Tento obsah je zatím jen v češtině.',
 			onlyInEnglish: 'This content is only available in English.',
 		},
-		aktuality: {
-			heading: 'Aktuality',
-			backLink: '← Zpět na Aktuality',
-			empty: 'Zatím žádné aktuality.',
-		},
 		kostovyVerse: {
 			heading: 'Kosťovy verše',
-			intro: 'Básně, které Kosťa píše na kapesníky a toaleťáky — running gag z knihy. Zatím jde jen o ukázku: prodej je plánovaný jako odměna budoucí kampaně na Hithit, žádný nákup tu tedy zatím nenajdete.',
-			hithitNote: '→ budoucí kampaň Hithit, zatím jen k nahlédnutí',
+			intro: 'Básně, které Kosťa píše na kapesníky a toaleťáky — aby se i tyhle činnosti mohly dělat kreativně.',
 			empty: 'Zatím žádné verše.',
 			czechOnlyNote:
 				'Kosťa píše ozdobnou, záměrně archaickou češtinou, kterou překlad nepřežije, pročež jeho verše zůstávají v originále.',
@@ -148,7 +133,7 @@ export const translations: Record<Locale, Translations> = {
 	en: {
 		nav: {
 			home: 'Home',
-			aktuality: 'Updates',
+			oKnize: 'About the book',
 			kostovyVerse: "Kosťa's Verses",
 			veronicinaTvorba: "Veronika's Work",
 			horoskop: "Kosťa's Horoscope",
@@ -156,6 +141,7 @@ export const translations: Record<Locale, Translations> = {
 		},
 		home: {
 			heading: 'Hi.',
+			oKnizeHeading: 'About the book',
 			readNowHeading: 'What you can read here right now',
 			readNowHoroskop: {
 				title: "Kosťa's Horoscope",
@@ -163,19 +149,17 @@ export const translations: Record<Locale, Translations> = {
 			},
 			readNowVerse: {
 				title: "Kosťa's Verses",
-				desc: 'Poems Kosťa wrote for sitting on the toilet, or for blowing your nose.',
+				desc: 'Poems Kosťa writes on tissues and toilet paper — so even those activities can be done creatively.',
 			},
 			readNowTvorba: {
 				title: "Veronika's Work",
 				desc: "Veronika is a side character who's always coming up with poems and songs on ukulele and piano. I might eventually record some of her work myself, on YouTube.",
 			},
-			aktualityHeading: 'Updates',
-			aktualityAllLink: 'All updates →',
-			aktualityEmpty: 'No updates yet.',
 		},
 		footer: {
-			newsletterHeading: 'ALEFUJ! updates',
-			newsletterBody: "Don't miss it when the book comes out. No spam, just honest updates about the book.",
+			newsletterHeading: 'Email me when the ALEFUJ! Hithit campaign launches',
+			newsletterBody:
+				"We won't flood your inbox. We'll write shortly before the campaign starts, during it, and after it — so the first email from us will arrive in a few months.",
 			emailLabel: 'Email',
 			emailPlaceholder: 'your email',
 			submitLabel: 'Subscribe',
@@ -186,15 +170,9 @@ export const translations: Record<Locale, Translations> = {
 			onlyInCzech: 'Tento obsah je zatím jen v češtině.',
 			onlyInEnglish: 'This content is only available in English.',
 		},
-		aktuality: {
-			heading: 'Updates',
-			backLink: '← Back to Updates',
-			empty: 'No updates yet.',
-		},
 		kostovyVerse: {
 			heading: "Kosťa's Verses",
-			intro: "Poems Kosťa writes on tissues and toilet paper — a running joke from the book. This is just a preview for now: selling them is planned as a future Hithit campaign reward, so there's nothing to buy here yet.",
-			hithitNote: '→ future Hithit campaign, preview only for now',
+			intro: 'Poems Kosťa writes on tissues and toilet paper — so even those activities can be done creatively.',
 			empty: 'No verses yet.',
 			czechOnlyNote:
 				"Kosťa writes in an ornate, deliberately old-fashioned Czech that doesn't survive translation, so his verses stay in the original. Here's what they are: poems he wrote for tissue paper and toilet paper, a running joke from the book.",

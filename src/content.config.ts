@@ -17,26 +17,6 @@ export const ZODIAC_SIGNS = [
 	'ryby',
 ] as const;
 
-// Each update lives at: src/content/aktuality/<slug>/index.md
-// (post text + its own images sit together in one folder — the "page bundle"
-// pattern). Templates live outside this folder, in src/content/_templates/,
-// so they can never accidentally match this collection's loader pattern.
-// `lang` + optional `translationKey` follow the same bilingual pattern as
-// vendulasubert.cz's blog posts: a translation is a second, separate post
-// file, linked to its sibling by sharing a translationKey.
-const aktuality = defineCollection({
-	loader: glob({ pattern: '*/index.md', base: './src/content/aktuality' }),
-	schema: ({ image }) =>
-		z.object({
-			title: z.string(),
-			date: z.coerce.date(),
-			lang: z.enum(['cs', 'en']),
-			translationKey: z.string().optional(),
-			summary: z.string(),
-			heroImage: image().optional(),
-		}),
-});
-
 // One file per zodiac sign, ever: src/content/horoskop/<sign>.md — the text
 // is the markdown body (main paragraph + an italicized editorial aside), not
 // a frontmatter field, so it renders through the normal markdown pipeline
@@ -101,4 +81,4 @@ const pages = defineCollection({
 	}),
 });
 
-export const collections = { aktuality, horoskop, kostovyVerse, veronicinaTvorba, pages };
+export const collections = { horoskop, kostovyVerse, veronicinaTvorba, pages };

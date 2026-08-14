@@ -5,11 +5,11 @@ import Layout from '../../layouts/Layout.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import TranslationNotice from '../../components/TranslationNotice.astro';
 import { loadPage } from '../../lib/pages';
-import { getAktuality } from '../../lib/aktuality';
 import frontCover from '../../assets/ilustrace/front-cover-teal.png';
 import houseSketch1 from '../../assets/ilustrace/house-sketch-01.png';
 import houseSketch2 from '../../assets/ilustrace/house-sketch-02.png';
-import { t, locales, dateLocale, type Locale } from '../../lib/i18n';
+import magnifyingGlass from '../../assets/ilustrace/vinetka_10.png';
+import { t, locales, type Locale } from '../../lib/i18n';
 
 export function getStaticPaths() {
 	return locales.map((lang) => ({ params: { lang } }));
@@ -22,12 +22,11 @@ const copy = t(lang);
 const { entry: homeEntry, shownLang: homeShownLang } = await loadPage('home', lang);
 const { Content: HomeContent } = await render(homeEntry);
 
+const { entry: oKnizeEntry, shownLang: oKnizeShownLang } = await loadPage('o-knize', lang);
+const { Content: OKnizeContent } = await render(oKnizeEntry);
+
 const { entry: creditsEntry, shownLang: creditsShownLang } = await loadPage('credits', lang);
 const { Content: CreditsContent } = await render(creditsEntry);
-
-const allUpdates = await getAktuality(lang);
-const latestUpdates = allUpdates.slice(0, 3);
-const dateFormatter = new Intl.DateTimeFormat(dateLocale(lang), { day: 'numeric', month: 'long', year: 'numeric' });
 
 const READ_NOW = [
 	{ href: 'horoskop/', ...copy.home.readNowHoroskop },
@@ -56,6 +55,20 @@ const READ_NOW = [
 		</div>
 	</section>
 
+	<section id="o-knize" class="panel panel-cream o-knize">
+		<div class="container">
+			<p class="section-label">Sešit č. 2</p>
+			<div class="o-knize-heading-row">
+				<h2>{copy.home.oKnizeHeading}</h2>
+				<Image class="accent" src={magnifyingGlass} alt="" width={64} />
+			</div>
+			<div class="prose">
+				{oKnizeShownLang !== lang && <TranslationNotice requestedLang={lang} shownLang={oKnizeShownLang} />}
+				<OKnizeContent />
+			</div>
+		</div>
+	</section>
+
 	<section class="panel panel-teal read-now">
 		<div class="container">
 			<h2>{copy.home.readNowHeading}</h2>
@@ -75,29 +88,6 @@ const READ_NOW = [
 	<section class="panel panel-cream">
 		<div class="container newsletter-inline">
 			<Newsletter lang={lang} variant="cream" />
-		</div>
-	</section>
-
-	<section class="panel panel-cream">
-		<div class="container">
-			<p class="section-label">Sešit č. 2</p>
-			<h2>{copy.home.aktualityHeading}</h2>
-			{
-				latestUpdates.length === 0 ? (
-					<p>{copy.home.aktualityEmpty}</p>
-				) : (
-					<div class="updates">
-						{latestUpdates.map((post) => (
-							<a class="clip update-card" href={`${base}${lang}/aktuality/${post.id}/`}>
-								<div class="date">{dateFormatter.format(post.data.date)}</div>
-								<h3>{post.data.title}</h3>
-								<p>{post.data.summary}</p>
-							</a>
-						))}
-					</div>
-				)
-			}
-			<a class="btn" style="margin-top:28px;" href={`${base}${lang}/aktuality/`}>{copy.home.aktualityAllLink}</a>
 		</div>
 	</section>
 
@@ -179,32 +169,38 @@ const READ_NOW = [
 		padding-block: 40px;
 	}
 
-	.updates {
-		display: grid;
-		gap: 22px;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-		margin-top: 24px;
+	.o-knize {
+		/* Offsets the anchor scroll target so a fixed/sticky header (present
+		   or future) never lands flush against the heading. */
+		scroll-margin-top: 90px;
+		padding-top: 20px;
+		padding-bottom: 44px;
 	}
-	.update-card {
-		display: block;
-		text-decoration: none;
-		color: var(--ink);
-		transform: rotate(-0.6deg);
+	.o-knize .prose {
+		max-width: 62ch;
 	}
-	.update-card:nth-child(even) {
-		transform: rotate(0.5deg);
+	.o-knize-heading-row {
+		display: flex;
+		align-items: center;
+		gap: 16px;
 	}
-	.update-card .date {
-		font-family: var(--font-mono);
-		font-size: 12px;
-		color: var(--ink-soft);
-	}
-	.update-card h3 {
-		margin: 8px 0;
-	}
-	.update-card p {
+	.o-knize-heading-row h2 {
 		margin: 0;
-		color: var(--ink-soft);
+	}
+	.o-knize-heading-row .accent {
+		flex-shrink: 0;
+		width: 64px;
+		height: auto;
+		opacity: 0.85;
+		transform: rotate(-6deg);
+	}
+	/* The closing pitch line gets visual weight, as the section's payoff. */
+	.o-knize .prose :global(p:last-of-type) {
+		margin-top: 1.4em;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 22px;
+		color: var(--teal);
 	}
 
 	.credits {

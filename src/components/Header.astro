@@ -14,12 +14,19 @@ const base = import.meta.env.BASE_URL;
 const other = otherLocale(lang);
 const copy = t(lang);
 
+// "O knize" isn't its own page — it's a section on the homepage — so it
+// gets a full-path anchor href (works when clicked from any page) instead
+// of a `section`-matched route, and never carries aria-current="page".
 const NAV = [
-	{ slug: '', label: copy.nav.home },
-	{ slug: 'aktuality/', label: copy.nav.aktuality },
-	{ slug: 'kostovy-verse/', label: copy.nav.kostovyVerse },
-	{ slug: 'veronicina-tvorba/', label: copy.nav.veronicinaTvorba },
-	{ slug: 'horoskop/', label: copy.nav.horoskop },
+	{ href: `${base}${lang}/`, label: copy.nav.home, current: section === '' },
+	{ href: `${base}${lang}/#o-knize`, label: copy.nav.oKnize, current: false },
+	{ href: `${base}${lang}/kostovy-verse/`, label: copy.nav.kostovyVerse, current: section === 'kostovy-verse/' },
+	{
+		href: `${base}${lang}/veronicina-tvorba/`,
+		label: copy.nav.veronicinaTvorba,
+		current: section === 'veronicina-tvorba/',
+	},
+	{ href: `${base}${lang}/horoskop/`, label: copy.nav.horoskop, current: section === 'horoskop/' },
 ];
 
 const toggleHref = toggleHrefOverride ?? `${base}${other}/${section}`;
@@ -31,7 +38,7 @@ const toggleHref = toggleHrefOverride ?? `${base}${other}/${section}`;
 		<nav aria-label={lang === 'cs' ? 'Hlavní navigace' : 'Main navigation'}>
 			{
 				NAV.map((item) => (
-					<a href={`${base}${lang}/${item.slug}`} aria-current={section === item.slug ? 'page' : undefined}>
+					<a href={item.href} aria-current={item.current ? 'page' : undefined}>
 						{item.label}
 					</a>
 				))
