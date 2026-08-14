@@ -20,7 +20,6 @@ const poems = await getCollection('kostovyVerse');
 <Layout lang={lang} section="kostovy-verse/" title={copy.heading} description={copy.intro}>
 	<section class="panel panel-teal">
 		<div class="container">
-			<p class="section-label" style="color: var(--lime);">Sešit č. 5</p>
 			<h2>{copy.heading}</h2>
 			<p class="intro">{copy.intro}</p>
 			{lang === 'en' && <CzechOnlyNotice message={copy.czechOnlyNote} />}
