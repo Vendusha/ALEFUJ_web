@@ -1,8 +1,9 @@
 ---
 // Static-hosting language redirect: GitHub Pages can't do server-side
-// language negotiation, so this picks a language client-side and redirects.
-// Defaults to Czech whenever English isn't clearly preferred, and degrades
-// to a plain meta-refresh to /cs/ when JavaScript is unavailable.
+// language negotiation, so this always sends visitors to the Czech
+// homepage — the primary audience is Czech, and browser-language
+// detection was sending some Czech visitors to /en/ unexpectedly. English
+// stays fully reachable via the header's language toggle once on the site.
 import { siteName } from '../lib/i18n';
 
 const base = import.meta.env.BASE_URL;
@@ -15,20 +16,9 @@ const enHref = `${base}en/`;
 	<head>
 		<meta charset="utf-8" />
 		<title>{siteName}</title>
-		<!-- Only takes effect when JavaScript is disabled — otherwise the
-		     script below runs first and picks a language. -->
-		<noscript>
-			<meta http-equiv="refresh" content={`0; url=${csHref}`} />
-		</noscript>
-		<script is:inline define:vars={{ csHref, enHref }}>
-			var preferred = (navigator.languages && navigator.languages[0]) || navigator.language || 'cs';
-			var target = preferred.toLowerCase().startsWith('en') ? enHref : csHref;
-			window.location.replace(target);
-		</script>
+		<meta http-equiv="refresh" content={`0; url=${csHref}`} />
 	</head>
 	<body>
-		<noscript>
-			<p><a href={csHref}>Pokračovat v češtině</a> / <a href={enHref}>Continue in English</a></p>
-		</noscript>
+		<p><a href={csHref}>Pokračovat v češtině</a> / <a href={enHref}>Continue in English</a></p>
 	</body>
 </html>

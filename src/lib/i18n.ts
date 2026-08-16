@@ -101,7 +101,7 @@ export const translations: Record<Locale, Translations> = {
 			emailPlaceholder: 'váš e-mail',
 			submitLabel: 'Přihlásit se',
 			successMessage: 'Díky! Zkontrolujte e-mail a potvrďte přihlášení k odběru.',
-			copyright: 'Vendula Maulerová',
+			copyright: 'Vendula Šubert',
 		},
 		translationNotice: {
 			onlyInCzech: 'Tento obsah je zatím jen v češtině.',
@@ -164,7 +164,7 @@ export const translations: Record<Locale, Translations> = {
 			emailPlaceholder: 'your email',
 			submitLabel: 'Subscribe',
 			successMessage: 'Thanks! Check your email to confirm your subscription.',
-			copyright: 'Vendula Maulerová',
+			copyright: 'Vendula Šubert',
 		},
 		translationNotice: {
 			onlyInCzech: 'Tento obsah je zatím jen v češtině.',
