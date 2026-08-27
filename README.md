@@ -36,7 +36,9 @@ That's the whole loop, every time: **write/edit in VS Code → Source Control pa
 
 ## Bilingual (cs/en)
 
-The site frame (navigation, buttons, the homepage opening/status text, the "O knize" section, credits) is bilingual. **Kosťa's horoscope, Kosťa's verses, and Veronika's poems and songs are Czech-only, on purpose** — their humour and rhymes depend on a register that doesn't survive translation. Visitors on `/en/` see a short note explaining that, then the original Czech content below it, rather than a machine translation or a missing page. Don't add English versions of these three collections; there's nothing to add them *to* — the schemas don't have a `lang` field.
+The site frame (navigation, buttons, the homepage opening/status text, the "O knize" section, credits) is bilingual. **Kosťa's verses and Veronika's poems and songs stay Czech-only, on purpose** — their rhymes and wordplay depend on a register that doesn't survive translation. Visitors on `/en/` see a short note explaining that, then the original Czech content below it, rather than a machine translation or a missing page. Don't add English versions of those two collections; there's nothing to add them *to* — the schemas don't have a `lang` field.
+
+**Kosťův horoskop is the one exception** — it's fully translated, one `cs.md` and one `en.md` per zodiac sign (see "Editing each section" below). Every sign needs both files kept in sync; a translation isn't optional the way it is for a bilingual Aktualita-style post.
 
 `/` redirects visitors to `/cs/` or `/en/` based on their browser language (defaulting to Czech). Everything else always lives under `/cs/...` or `/en/...`.
 
@@ -56,9 +58,9 @@ The site used to have an Aktuality section — a reverse-chronological list of s
 
 ## Editing each section
 
-Here's how each section works when you need to edit it. Kosťův horoskop, Kosťovy verše, and Veroničina tvorba are all Czech-only (see "Bilingual" above) — there's no `lang` field to fill in for any of them.
+Here's how each section works when you need to edit it. Kosťovy verše and Veroničina tvorba are Czech-only (see "Bilingual" above) — there's no `lang` field to fill in for either. Kosťův horoskop is bilingual, unlike the other two — see below.
 
-- **Kosťův horoskop** (`src/content/horoskop/`) — exactly 12 files, one per zodiac sign, forever: `beran.md`, `byk.md`, `blizenci.md`, `rak.md`, `lev.md`, `panna.md`, `vahy.md`, `stir.md`, `strelec.md`, `kozoroh.md`, `vodnar.md`, `ryby.md`. There's no month field and nothing to add — you write each sign once and edit it occasionally if you want. The page works out which sign is "in season" from standard zodiac date ranges, read from the visitor's own device (client-side, no server, no scheduled rebuild), and shows it full-size up top with the other 11 as click-to-expand tiles below. To edit a sign, open its file directly — no template-copying needed since the file already exists. The horoscope text is the markdown body (not a frontmatter field), so the trailing italicized aside (`*...*`) renders as real italics. `excerpt` in the frontmatter is optional — leave it out and the preview tile auto-generates one from the first sentence of the body. If a sign's file is ever deleted, or you set `draft: true` on it, the page treats it as not-yet-written and shows a graceful "still being prepared" message in the featured slot instead of blank or draft text — the other 11 tiles keep working regardless.
+- **Kosťův horoskop** (`src/content/horoskop/`) — 12 folders, one per zodiac sign, forever: `beran/`, `byk/`, `blizenci/`, `rak/`, `lev/`, `panna/`, `vahy/`, `stir/`, `strelec/`, `kozoroh/`, `vodnar/`, `ryby/`. Each folder holds exactly two files, `cs.md` and `en.md` — this is the one section where Kosťa's writing *is* translated (see "Bilingual" above for why it's the exception). Copy `src/content/_templates/horoskop/cs.md` and `en.md` for a sign that's missing either file (shouldn't happen in practice — all 24 exist already — but the templates are there for reference or if a sign's text ever gets rewritten from scratch). There's no month field and nothing to add on a schedule — you write each sign once, in both languages, and edit occasionally if you want. The page works out which sign is "in season" from standard zodiac date ranges, read from the visitor's own device (client-side, no server, no scheduled rebuild), and shows it full-size up top with the other 11 as click-to-expand tiles below — independently per language, so an English visitor and a Czech visitor always see the same sign featured, just in their own language. The horoscope text is the markdown body (not a frontmatter field), so the trailing italicized aside (`*...*`) renders as real italics. `excerpt` in the frontmatter is optional — leave it out and the preview tile auto-generates one from the first sentence of the body. If a sign's file for a given language is ever deleted, or you set `draft: true` on it, that language's page treats it as not-yet-written and shows a graceful "still being prepared" message in the featured slot instead of blank or draft text — the other 11 tiles, and the other language, keep working regardless. Zodiac sign names are looked up per language too (`ZODIAC_SIGN_LABELS` in `src/lib/site.ts`) — "Beran" on `/cs/`, "Aries" on `/en/`, same underlying sign key.
 - **Kosťovy verše** (`src/content/kostovy-verse/`) — one folder per poem (a "page bundle": the poem's text plus its own images, if any, live together). Copy `src/content/_templates/kostuv-vers/index.md` to add a new one. `productType` (`kapesnik` or `toaletak`) and `status` (`coming-soon`, the only value it supports right now) still exist in the frontmatter and still matter for the data model — they're just not surfaced in the page copy anymore, since the "future Hithit campaign reward" framing was dropped from the visible text. Still no cart, no checkout, no payment logic.
 - **Veroničina tvorba** (`src/content/veronicina-tvorba/`) — Veronika's poems and songs together, one flat file per entry, no folder needed. Copy `src/content/_templates/veronicina-tvorba.md`. `typ` must be exactly `basen` or `pisen` — it controls which group (Básně / Písně) the entry is shown under. `youtubeId` is optional (skip it for poems, or for songs not yet recorded) — when present, it's just the ID portion of the YouTube URL (`youtube.com/watch?v=`**`THIS_PART`**). There's no separate Video page anymore; a video belongs next to the song it's for.
 
@@ -68,8 +70,8 @@ Here's how each section works when you need to edit it. Kosťův horoskop, Kosť
 src/
   content/
     _templates/              ← copy from here, never published (outside every collection's own folder)
-      horoskop.md, kostuv-vers/index.md, veronicina-tvorba.md
-    horoskop/<sign>.md                  ← exactly 12 files, one per zodiac sign forever, Czech-only
+      horoskop/cs.md, horoskop/en.md, kostuv-vers/index.md, veronicina-tvorba.md
+    horoskop/<sign>/cs.md, /en.md        ← 12 folders × 2 files, one per zodiac sign forever, bilingual
     kostovy-verse/<slug>/index.md       ← Kosťa's poems, page-bundle, Czech-only
     veronicina-tvorba/<slug>.md         ← Veronika's poems + songs, flat file, Czech-only
     pages/<section>/<lang>/index.md     ← bilingual prose: home/{cs,en}, o-knize/{cs,en}, credits/{cs,en}
@@ -77,17 +79,17 @@ src/
   assets/ilustrace/          ← cover art, house-sketch accents, the 45 hand-drawn vignettes
   lib/
     i18n.ts                  ← UI strings (nav, footer, page chrome) in both languages, MailerLite endpoint
-    site.ts                  ← Czech-only display labels (zodiac signs, kapesník/toaleťák)
+    site.ts                  ← display labels (zodiac signs per language, kapesník/toaleťák — Czech-only)
     pages.ts                 ← loads a `pages` entry with cs/en fallback (never a 404 or empty page)
     horoskop.ts               ← zodiac date-range → featured sign, excerpt auto-generation
   layouts/Layout.astro       ← shared HTML shell: fonts, Header, Footer, OG meta tags
   components/                 ← Header (nav + language toggle), Footer, Newsletter, TranslationNotice, CzechOnlyNotice
   pages/
-    index.astro                          ← redirects to /cs/ or /en/ by browser language
+    index.astro                          ← always redirects to /cs/ (Czech is the primary audience; English is one click away via the header toggle)
     [lang]/index.astro                   ← Home (hero, "O knize" section, read-now cards, newsletter, credits)
     [lang]/kostovy-verse/index.astro     ← Kosťovy verše showcase
     [lang]/veronicina-tvorba/index.astro ← Veroničina tvorba (poems + songs, grouped)
-    [lang]/horoskop/index.astro          ← Kosťův horoskop (client-side "in season" sign, expandable tiles for the rest)
+    [lang]/horoskop/index.astro          ← Kosťův horoskop (client-side "in season" sign, expandable tiles for the rest; bilingual)
 .github/workflows/deploy.yml  ← builds and deploys to GitHub Pages on push to main
 ```
 

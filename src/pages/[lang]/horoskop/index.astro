@@ -1,7 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
-import CzechOnlyNotice from '../../../components/CzechOnlyNotice.astro';
 import { ZODIAC_SIGNS } from '../../../content.config';
 import { ZODIAC_SIGN_LABELS } from '../../../lib/site';
 import { getFirstParagraph, autoExcerpt } from '../../../lib/horoskop';
@@ -14,9 +13,9 @@ export function getStaticPaths() {
 const lang = Astro.params.lang as Locale;
 const copy = t(lang).horoskop;
 
-const PLACEHOLDER_TEXT = '[doplním]';
+const PLACEHOLDER_TEXT = lang === 'cs' ? '[doplním]' : '[to be added]';
 
-const entries = await getCollection('horoskop');
+const entries = await getCollection('horoskop', (e) => e.data.lang === lang);
 const bySign = new Map(entries.map((e) => [e.data.sign, e]));
 
 // One entry per sign in canonical order, whether or not a real file exists
@@ -25,7 +24,7 @@ const bySign = new Map(entries.map((e) => [e.data.sign, e]));
 // always builds with all twelve slots present.
 const signs = await Promise.all(
 	ZODIAC_SIGNS.map(async (sign) => {
-		const label = ZODIAC_SIGN_LABELS[sign];
+		const label = ZODIAC_SIGN_LABELS[lang][sign];
 		const entry = bySign.get(sign);
 		if (!entry || entry.data.draft) {
 			return { sign, label, isDraft: true as const, excerpt: PLACEHOLDER_TEXT };
@@ -41,7 +40,6 @@ const signs = await Promise.all(
 	<section class="panel panel-teal">
 		<div class="container">
 			<h2>{copy.heading}</h2>
-			{lang === 'en' && <CzechOnlyNotice message={copy.czechOnlyNote} />}
 			<div id="featured-horoscope">
 				<p class="loading">{copy.loading}</p>
 				{

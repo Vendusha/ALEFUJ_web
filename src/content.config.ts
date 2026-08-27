@@ -17,20 +17,23 @@ export const ZODIAC_SIGNS = [
 	'ryby',
 ] as const;
 
-// One file per zodiac sign, ever: src/content/horoskop/<sign>.md — the text
-// is the markdown body (main paragraph + an italicized editorial aside), not
-// a frontmatter field, so it renders through the normal markdown pipeline
-// (needed for the aside's italics). Which sign is "featured" is worked out
-// client-side from standard zodiac date ranges (see the horoskop page) — no
-// month field, no rotation schedule, no archive. `excerpt` is optional and
-// auto-generated from the body when omitted (see src/lib/horoskop.ts).
-// `draft` marks a sign that hasn't been written yet, so the page can still
-// build with all 12 present without showing placeholder text as if real.
-// Czech-only, deliberately — see the "Bilingual" section of the README.
+// Two files per zodiac sign, ever: src/content/horoskop/<sign>/cs.md and
+// .../en.md — the text is the markdown body (main paragraph + an italicized
+// editorial aside), not a frontmatter field, so it renders through the
+// normal markdown pipeline (needed for the aside's italics). Which sign is
+// "featured" is worked out client-side from standard zodiac date ranges
+// (see the horoskop page) — no month field, no rotation schedule, no
+// archive. `excerpt` is optional and auto-generated from the body when
+// omitted (see src/lib/horoskop.ts). `draft` marks a sign/language that
+// hasn't been written yet, so the page can still build with all slots
+// present without showing placeholder text as if real. Unlike the other
+// three Czech-only collections, this one *is* translated — see the
+// "Bilingual" section of the README for why it's the exception.
 const horoskop = defineCollection({
-	loader: glob({ pattern: '*.md', base: './src/content/horoskop' }),
+	loader: glob({ pattern: '*/*.md', base: './src/content/horoskop' }),
 	schema: z.object({
 		sign: z.enum(ZODIAC_SIGNS),
+		lang: z.enum(['cs', 'en']),
 		excerpt: z.string().optional(),
 		draft: z.boolean().default(false),
 	}),

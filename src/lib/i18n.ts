@@ -62,7 +62,6 @@ interface Translations {
 		otherSignsHeading: string;
 		loading: string;
 		fallback: string;
-		czechOnlyNote: string;
 	};
 }
 
@@ -126,8 +125,6 @@ export const translations: Record<Locale, Translations> = {
 			otherSignsHeading: 'Ostatní znamení',
 			loading: 'Horoskop se načítá…',
 			fallback: 'Kosťův horoskop pro toto znamení se připravuje.',
-			czechOnlyNote:
-				'Kosťa, jeden z vypravěčů knihy, píše horoskop ozdobnou, záměrně archaickou češtinou, kterou překlad nepřežije, pročež zůstává v originále. Jde o suché, nijak zvlášť lichotivé čtení pro všech dvanáct znamení.',
 		},
 	},
 	en: {
@@ -190,8 +187,6 @@ export const translations: Record<Locale, Translations> = {
 			otherSignsHeading: 'Other signs',
 			loading: 'Loading horoscope…',
 			fallback: "Kosťa's horoscope for this sign is still being written.",
-			czechOnlyNote:
-				"Kosťa, one of the book's narrators, writes this horoscope in an ornate, deliberately old-fashioned Czech that doesn't survive translation, so it stays in the original below. It's a dry, not-especially-flattering read for all twelve signs.",
 		},
 	},
 };

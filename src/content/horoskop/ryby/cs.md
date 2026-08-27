@@ -1,5 +1,6 @@
 ---
 sign: ryby
+lang: cs
 ---
 
 Ryba je člověk přizpůsobivý a smírný, což v překladu znamená naprostou absenci jakéhokoliv náznaku sebeúcty. Ryba obrací tok evoluce: je schopna přizpůsobit se i takovým okolnostem, u kterých by se většina ostatních živočichů zastavila a položila si otázku, zda je celá situace skutečně v zájmu jejich přežití. Co se týká společenských událostí, Ryba patří k těm, u nichž ostatní přítomní chovají upřímnou naději, že jejich příchod bude výrazně zpožděn a odchod výrazně uspíšen. Ryba sdílí s Kozorohem náchylnost k návštěvám podomních obchodníků, přičemž na rozdíl od Kozoroha nepotřebuje ani tři minuty k podpisu smlouvy.

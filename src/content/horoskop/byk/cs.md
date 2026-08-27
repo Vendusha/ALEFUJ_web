@@ -1,5 +1,6 @@
 ---
 sign: byk
+lang: cs
 ---
 
 Býci jsou lidé silní a odolní, přičemž obě vlastnosti využívají především k bezpáteřnímu výstupu na společenský žebříček. Umění a praktičnost v sobě spojují způsobem, který vzbuzuje zájem příslušných policejních orgánů. Když už náhodou nepracují jako zprostředkovatelé nedobrovolné eutanazie, exekutoři nebo politici, snaží se vydělat peníze prodejem falešných plomb. Celkově vzato by jim i jejich okolí prospělo, kdyby svou odolnost obrátili ke snaze získat občanství autokratických států — nejlépe na místě dostatečně vzdáleném od zbytku civilizace.
