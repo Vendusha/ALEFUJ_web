@@ -4,11 +4,14 @@ typ: basen
 description: "Krátká fyzikální básnička o fotoelektrickém jevu a relativitě."
 ---
 
-Jev fotoelektrický —
+Jev fotoelektrický —<br />
 píšu teoreticky.
-Intenzita světla,
+
+Intenzita světla,<br />
 argumenty smetla.
-Přivedla mě na myšlenku,
+
+Přivedla mě na myšlenku,<br />
 světa, který vidím venku.
-Relativita, (specka!)
+
+Relativita, (specka!)<br />
 všechny přivítá. (děcka!)
