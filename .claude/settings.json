@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(lsof -ti:4321 -sTCP:LISTEN)",
+      "Bash(xargs -r kill)",
+      "Bash(npx astro *)",
+      "Bash(npm run *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(gh run *)",
+      "Bash(nohup npm run dev)",
+      "Bash(disown)",
+      "Bash(timeout 30 bash -c 'until node -e \"fetch\\(\\\\\"http://localhost:4321/\\\\\"\\).then\\(r=>process.exit\\(r.ok?0:1\\)\\).catch\\(\\(\\)=>process.exit\\(1\\)\\)\" 2>/dev/null; do sleep 1; done')"
+    ]
+  }
+}
