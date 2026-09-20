@@ -132,6 +132,16 @@ p {
 	font-weight: 600;
 }
 
+.prose a {
+	text-decoration-color: var(--rule);
+	text-underline-offset: 2px;
+}
+
+.prose a:hover {
+	color: var(--teal);
+	text-decoration-color: var(--teal);
+}
+
 /* Panels: the site alternates full-bleed teal and cream sections */
 .panel {
 	position: relative;
