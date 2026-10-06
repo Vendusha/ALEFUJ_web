@@ -1,7 +1,7 @@
 ---
-title: "ALEFUJ!"
+title: "ALEFUJ! — a comic novel by Vendula Šubert"
 lang: en
-description: "ALEFUJ! — a comic novel. Marketing and update site for the book."
+description: "A comic novel by Vendula Šubert. Kosťa keeps looking for work that means something; Bára is chasing the man who anonymously advised the Nobel Committee."
 ---
 
 Here's Vendula Šubert (née Maulerová). If I told you ten years ago that I was writing a book — I'm finishing it this year. Thanks for your patience with me.

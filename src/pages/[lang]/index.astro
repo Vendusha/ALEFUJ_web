@@ -50,8 +50,8 @@ const READ_NOW = [
 			</div>
 		</div>
 		<div class="container house-divider">
-			<Image src={houseSketch1} alt="" width={200} />
-			<Image src={houseSketch2} alt="" width={260} />
+			<Image src={houseSketch1} alt="" aria-hidden="true" width={200} />
+			<Image src={houseSketch2} alt="" aria-hidden="true" width={260} />
 		</div>
 	</section>
 
@@ -59,7 +59,7 @@ const READ_NOW = [
 		<div class="container">
 			<div class="o-knize-heading-row">
 				<h2>{copy.home.oKnizeHeading}</h2>
-				<Image class="accent" src={magnifyingGlass} alt="" width={64} />
+				<Image class="accent" src={magnifyingGlass} alt="" aria-hidden="true" width={64} />
 			</div>
 			<div class="prose">
 				{oKnizeShownLang !== lang && <TranslationNotice requestedLang={lang} shownLang={oKnizeShownLang} />}

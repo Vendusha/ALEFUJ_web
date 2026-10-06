@@ -34,9 +34,9 @@ const pisne = withContent.filter((e) => e.entry.data.typ === 'pisen');
 	<section class="panel panel-cream">
 		<div class="container">
 			<div class="section-head">
-				<Image class="staff" src={musicIcon} alt="" width={140} />
+				<Image class="staff" src={musicIcon} alt="" aria-hidden="true" width={140} />
 			</div>
-			<h2>{copy.heading}</h2>
+			<h1 class="page-title">{copy.heading}</h1>
 			{lang === 'en' && <CzechOnlyNotice message={copy.czechOnlyNote} />}
 			{
 				all.length === 0 ? (

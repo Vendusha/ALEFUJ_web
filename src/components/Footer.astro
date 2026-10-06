@@ -15,9 +15,13 @@ const year = new Date().getFullYear();
 
 <footer class="site-footer">
 	<div class="container">
-		<Image class="stamp" src={broucekIcon} alt="" width={40} loading="lazy" />
+		<Image class="stamp" src={broucekIcon} alt="" aria-hidden="true" width={40} loading="lazy" />
 		<Newsletter lang={lang} variant="teal" />
-		<p class="copyright">© {year} {copy.copyright} · ALEFUJ!</p>
+		<p class="copyright">
+			© {year}
+			<a href={lang === 'cs' ? 'https://vendulasubert.cz/cs/' : 'https://vendulasubert.cz/en/'}>{copy.copyright}</a>
+			· ALEFUJ!
+		</p>
 	</div>
 </footer>
 

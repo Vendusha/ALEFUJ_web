@@ -13,7 +13,40 @@ interface Props {
 }
 
 const { lang, section, toggleHref, title, description } = Astro.props;
-const pageTitle = section === '' ? siteName : `${title} — ${siteName}`;
+const isHome = section === '';
+const pageTitle = isHome ? title : `${title} — ${siteName}`;
+
+const otherLang: Locale = lang === 'cs' ? 'en' : 'cs';
+const path = Astro.url.pathname;
+const csUrl = new URL(path.replace(/^\/en\//, '/cs/'), Astro.site).href;
+const enUrl = new URL(path.replace(/^\/cs\//, '/en/'), Astro.site).href;
+
+const ogImageUrl = new URL('/og-image.jpg', Astro.site).href;
+const ogImageAlt =
+	lang === 'cs'
+		? 'Obálka knihy ALEFUJ! — teal ilustrace s brouky'
+		: 'Cover of ALEFUJ! — teal illustration with bugs';
+const ogLocale = lang === 'cs' ? 'cs_CZ' : 'en_US';
+const ogLocaleAlternate = otherLang === 'cs' ? 'cs_CZ' : 'en_US';
+
+const websiteJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'WebSite',
+	name: siteName,
+	url: new URL(`/${lang}/`, Astro.site).href,
+	inLanguage: lang === 'cs' ? 'cs-CZ' : 'en-US',
+};
+const bookJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'Book',
+	name: siteName,
+	author: { '@type': 'Person', name: 'Vendula Šubert', url: 'https://vendulasubert.cz/' },
+	inLanguage: 'cs',
+	genre: lang === 'cs' ? 'humoristický román' : 'comic novel',
+	url: new URL(`/${lang}/`, Astro.site).href,
+	...(description ? { description } : {}),
+};
+const jsonLd = isHome ? [websiteJsonLd, bookJsonLd] : [websiteJsonLd];
 ---
 
 <!doctype html>
@@ -24,6 +57,9 @@ const pageTitle = section === '' ? siteName : `${title} — ${siteName}`;
 		<title>{pageTitle}</title>
 		{description && <meta name="description" content={description} />}
 		<link rel="canonical" href={Astro.url.href} />
+		<link rel="alternate" hreflang="cs" href={csUrl} />
+		<link rel="alternate" hreflang="en" href={enUrl} />
+		<link rel="alternate" hreflang="x-default" href={csUrl} />
 		<link rel="icon" href={`${import.meta.env.BASE_URL}favicon.svg`} type="image/svg+xml" />
 
 		<meta property="og:type" content="website" />
@@ -31,6 +67,22 @@ const pageTitle = section === '' ? siteName : `${title} — ${siteName}`;
 		<meta property="og:title" content={pageTitle} />
 		<meta property="og:url" content={Astro.url.href} />
 		{description && <meta property="og:description" content={description} />}
+		<meta property="og:locale" content={ogLocale} />
+		<meta property="og:locale:alternate" content={ogLocaleAlternate} />
+		<meta property="og:image" content={ogImageUrl} />
+		<meta property="og:image:secure_url" content={ogImageUrl} />
+		<meta property="og:image:type" content="image/jpeg" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content={ogImageAlt} />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={pageTitle} />
+		{description && <meta name="twitter:description" content={description} />}
+		<meta name="twitter:image" content={ogImageUrl} />
+		<meta name="twitter:image:alt" content={ogImageAlt} />
+
+		<script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

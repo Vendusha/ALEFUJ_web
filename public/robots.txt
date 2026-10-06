@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://alefuj.cz/sitemap-index.xml

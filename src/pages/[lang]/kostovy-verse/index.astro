@@ -20,7 +20,7 @@ const poems = await getCollection('kostovyVerse');
 <Layout lang={lang} section="kostovy-verse/" title={copy.heading} description={copy.intro}>
 	<section class="panel panel-teal">
 		<div class="container">
-			<h2>{copy.heading}</h2>
+			<h1 class="page-title">{copy.heading}</h1>
 			<p class="intro">{copy.intro}</p>
 			{lang === 'en' && <CzechOnlyNotice message={copy.czechOnlyNote} />}
 			{
@@ -31,11 +31,11 @@ const poems = await getCollection('kostovyVerse');
 						{poems.map((poem) => (
 							<div class="verse-ticket">
 								<div class="seal">
-									<Image src={sealIcon} alt="" width={34} />
+									<Image src={sealIcon} alt="" aria-hidden="true" width={34} />
 								</div>
 								<span class="tag">{PRODUCT_TYPE_LABELS[poem.data.productType]}</span>
 								<h3>{poem.data.title}</h3>
-								{poem.data.image && <Image class="poem-image" src={poem.data.image} alt="" width={320} />}
+								{poem.data.image && <Image class="poem-image" src={poem.data.image} alt={poem.data.title} width={320} />}
 								<p class="poem">{poem.data.text}</p>
 							</div>
 						))}

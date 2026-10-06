@@ -80,6 +80,13 @@ h2 {
 	font-size: clamp(26px, 4vw, 34px);
 }
 
+/* A page's main heading is an h1 for document structure, but keeps the
+   h2 size it has always had. */
+h1.page-title {
+	font-size: clamp(26px, 4vw, 34px);
+	font-weight: 700;
+}
+
 h3 {
 	font-size: 20px;
 	margin-top: 0;

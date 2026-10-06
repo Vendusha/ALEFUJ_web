@@ -1,7 +1,7 @@
 ---
-title: "ALEFUJ!"
+title: "ALEFUJ! — humoristický román Venduly Šubert"
 lang: cs
-description: "ALEFUJ! — humoristický román. Marketingový a informační web ke knize."
+description: "Humoristický román Venduly Šubert. Kosťa hledá práci, která dává smysl, Bára pátrá po muži, který anonymně radil Nobelovu výboru."
 ---
 
 Tady Vendula Šubert (kdysi Maulerová). Jestli jsem vám před deseti lety řekla, že chystám knížku — letos ji dopisuju. Díky, že se mnou máte trpělivost.
