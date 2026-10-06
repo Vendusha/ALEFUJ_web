@@ -93,7 +93,7 @@ export const translations: Record<Locale, Translations> = {
 			},
 		},
 		footer: {
-			newsletterHeading: 'Chci dostat e-mail, až se spustí kampaň na Hithitu',
+			newsletterHeading: 'Chci dostat e-mail, až se spustí kampaň',
 			newsletterBody:
 				'Nebudeme vás zatěžovat přílišným množstvím informací. Dáme vědět krátce před začátkem kampaně, při ní a po ní — první e-mail od nás tedy dostanete až za několik měsíců.',
 			emailLabel: 'E-mail',
@@ -154,7 +154,7 @@ export const translations: Record<Locale, Translations> = {
 			},
 		},
 		footer: {
-			newsletterHeading: 'Email me when the ALEFUJ! Hithit campaign launches',
+			newsletterHeading: 'Email me when the ALEFUJ! campaign launches',
 			newsletterBody:
 				"We won't flood your inbox. We'll write shortly before the campaign starts, during it, and after it — so the first email from us will arrive in a few months.",
 			emailLabel: 'Email',

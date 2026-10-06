@@ -99,7 +99,7 @@ src/
 
 The footer (and homepage) signup form (`src/components/Newsletter.astro`) posts straight to a list on MailerLite — `MAILERLITE_ALEFUJ_FORM_ENDPOINT` in `src/lib/i18n.ts` (a different provider/account from vendulasubert.cz's Ecomail newsletter). It's a plain HTML form POST, no JavaScript embed or tracking script from MailerLite. The form's `target` is a same-page hidden `<iframe>` rather than a new tab, so the visitor never leaves the page; a small vanilla-JS snippet in the same component swaps the form for a "check your email" message once that iframe finishes loading. That swap fires on the iframe *loading*, not on a confirmed-accepted response (can't be read cross-origin), so a genuinely malformed submission would still show success — an accepted tradeoff for a simple signup form. If the form ever needs to move to a different MailerLite list or account, `MAILERLITE_ALEFUJ_FORM_ENDPOINT` is the one constant to update.
 
-The on-page copy (`i18n.ts` → `footer.newsletterHeading` / `newsletterBody`) frames this as a low-frequency, campaign-only list ("email me when the Hithit campaign launches"), not a general newsletter — the list itself is still internally named `alefuj-novinky` in the MailerLite dashboard, a naming mismatch worth cleaning up there if it ever gets confusing (doesn't affect anything on the site either way).
+The on-page copy (`i18n.ts` → `footer.newsletterHeading` / `newsletterBody`) frames this as a low-frequency, campaign-only list ("email me when the campaign launches"), not a general newsletter — the list itself is still internally named `alefuj-novinky` in the MailerLite dashboard, a naming mismatch worth cleaning up there if it ever gets confusing (doesn't affect anything on the site either way).
 
 ## Commands
 
