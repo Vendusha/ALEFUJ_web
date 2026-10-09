@@ -55,6 +55,15 @@ const ogImageUrl = new URL('/og-image.jpg', Astro.site).href;
 		<meta name="twitter:image:alt" content="Obálka knihy ALEFUJ! — teal ilustrace s brouky" />
 
 		<meta http-equiv="refresh" content={`0; url=${csHref}`} />
+
+		<!-- GoatCounter — see src/layouts/Layout.astro for the full explanation.
+		     Measured here too, unlike this page's counterpart on
+		     vendulasubert.cz, per explicit request. -->
+		{
+			!import.meta.env.DEV && (
+				<script is:inline data-goatcounter="https://alefuj.goatcounter.com/count" async src="//gc.zgo.at/count.js" />
+			)
+		}
 	</head>
 	<body>
 		<p><a href={csHref}>Pokračovat v češtině</a> / <a href={enHref}>Continue in English</a></p>

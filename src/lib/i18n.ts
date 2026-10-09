@@ -38,7 +38,9 @@ interface Translations {
 		emailPlaceholder: string;
 		submitLabel: string;
 		successMessage: string;
+		privacyLinkLabel: string;
 		copyright: string;
+		analyticsToggleLabel: string;
 	};
 	translationNotice: {
 		onlyInCzech: string;
@@ -100,7 +102,9 @@ export const translations: Record<Locale, Translations> = {
 			emailPlaceholder: 'váš e-mail',
 			submitLabel: 'Přihlásit se',
 			successMessage: 'Díky! Zkontrolujte e-mail a potvrďte přihlášení k odběru.',
+			privacyLinkLabel: 'Jak nakládám s vašimi údaji',
 			copyright: 'Vendula Šubert',
+			analyticsToggleLabel: 'Vypnout měření návštěvnosti',
 		},
 		translationNotice: {
 			onlyInCzech: 'Tento obsah je zatím jen v češtině.',
@@ -161,7 +165,9 @@ export const translations: Record<Locale, Translations> = {
 			emailPlaceholder: 'your email',
 			submitLabel: 'Subscribe',
 			successMessage: 'Thanks! Check your email to confirm your subscription.',
+			privacyLinkLabel: 'How I handle your data',
 			copyright: 'Vendula Šubert',
+			analyticsToggleLabel: 'Turn off analytics',
 		},
 		translationNotice: {
 			onlyInCzech: 'Tento obsah je zatím jen v češtině.',

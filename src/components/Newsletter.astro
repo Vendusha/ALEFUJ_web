@@ -51,6 +51,9 @@ const successId = `newsletter-success-${uid}`;
 	</form>
 	<iframe name={iframeName} class="hidden-iframe" title="newsletter" tabindex="-1" aria-hidden="true"></iframe>
 	<p id={successId} class="newsletter-success" hidden>{copy.successMessage}</p>
+	<p class="privacy-link">
+		<a href={`${import.meta.env.BASE_URL}${lang}/ochrana-osobnich-udaju/`}>{copy.privacyLinkLabel}</a>
+	</p>
 </div>
 
 <script>
@@ -182,5 +185,16 @@ const successId = `newsletter-success-${uid}`;
 	.newsletter.cream .newsletter-success {
 		border-color: var(--teal);
 		color: var(--teal);
+	}
+	.privacy-link {
+		margin: 10px 0 0;
+		font-family: var(--font-mono);
+		font-size: 11px;
+	}
+	.newsletter.teal .privacy-link a {
+		color: #9aa79a;
+	}
+	.newsletter.cream .privacy-link a {
+		color: var(--ink-soft);
 	}
 </style>

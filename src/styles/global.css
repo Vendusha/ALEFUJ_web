@@ -12,8 +12,12 @@
 	--lime: #d7de5c;
 	--rule: #cfc6ac;
 
-	--font-display: 'Fraunces', Georgia, serif;
-	--font-body: 'Source Serif 4', Georgia, serif;
+	/* Self-hosted via Fontsource (see src/layouts/Layout.astro and
+	   src/pages/index.astro) — the Fontsource variable packages register
+	   these exact family names, not the plain "Fraunces" / "Source Serif 4"
+	   Google Fonts used. */
+	--font-display: 'Fraunces Variable', Georgia, serif;
+	--font-body: 'Source Serif 4 Variable', Georgia, serif;
 	--font-mono: 'Space Mono', 'Courier New', monospace;
 
 	--measure: 64ch;
