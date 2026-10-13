@@ -44,7 +44,16 @@ const bookJsonLd = {
 	'@context': 'https://schema.org',
 	'@type': 'Book',
 	name: siteName,
-	author: { '@type': 'Person', name: 'Vendula Šubert', url: 'https://vendulasubert.cz/' },
+	// Same '@id' as the Person on vendulasubert.cz (src/lib/seo.ts there),
+	// so a crawler that sees both pages can tell it's the same entity
+	// rather than a namesake.
+	author: {
+		'@type': 'Person',
+		'@id': 'https://vendulasubert.cz/#person',
+		name: 'Vendula Šubert',
+		url: 'https://vendulasubert.cz/',
+	},
+	illustrator: { '@type': 'Person', name: 'Anna Jurčiková' },
 	inLanguage: 'cs',
 	genre: lang === 'cs' ? 'humoristický román' : 'comic novel',
 	url: new URL(`/${lang}/`, Astro.site).href,

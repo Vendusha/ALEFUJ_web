@@ -17,9 +17,29 @@ const year = new Date().getFullYear();
 	<div class="container">
 		<Image class="stamp" src={broucekIcon} alt="" aria-hidden="true" width={40} loading="lazy" />
 		<Newsletter lang={lang} variant="teal" />
+		<p class="profiles">
+			{copy.profilesLabel}{' '}
+			<a rel="me noopener noreferrer" target="_blank" href="https://www.linkedin.com/in/vendula-subert-425a9184"
+				>LinkedIn</a
+			>{' '}
+			·{' '}
+			<a
+				rel="me noopener noreferrer"
+				target="_blank"
+				href="https://www.researchgate.net/profile/Vendula-Subert">ResearchGate</a
+			>{' '}
+			·{' '}
+			<a rel="me noopener noreferrer" target="_blank" href="https://www.youtube.com/@vendulasubert"
+				>YouTube</a
+			>{' '}
+			·{' '}
+			<a rel="me noopener noreferrer" target="_blank" href={`https://vendulasubert.cz/${lang}/`}
+				>vendulasubert.cz</a
+			>
+		</p>
 		<p class="copyright">
 			© {year}
-			<a href={lang === 'cs' ? 'https://vendulasubert.cz/cs/' : 'https://vendulasubert.cz/en/'}>{copy.copyright}</a>
+			<a rel="me" href={lang === 'cs' ? 'https://vendulasubert.cz/cs/' : 'https://vendulasubert.cz/en/'}>{copy.copyright}</a>
 			· ALEFUJ! ·
 			<a href="#toggle-goatcounter">{copy.analyticsToggleLabel}</a>
 		</p>
@@ -37,5 +57,14 @@ const year = new Date().getFullYear();
 		width: auto;
 		margin-bottom: 20px;
 		opacity: 0.85;
+	}
+	.profiles {
+		font-family: var(--font-mono);
+		font-size: 11px;
+		color: #8b998b;
+		margin-top: 36px;
+	}
+	.copyright {
+		margin-top: 8px;
 	}
 </style>

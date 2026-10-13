@@ -41,6 +41,7 @@ interface Translations {
 		privacyLinkLabel: string;
 		copyright: string;
 		analyticsToggleLabel: string;
+		profilesLabel: string;
 	};
 	translationNotice: {
 		onlyInCzech: string;
@@ -105,6 +106,7 @@ export const translations: Record<Locale, Translations> = {
 			privacyLinkLabel: 'Jak nakládám s vašimi údaji',
 			copyright: 'Vendula Šubert',
 			analyticsToggleLabel: 'Vypnout měření návštěvnosti',
+			profilesLabel: 'Najdete mě i na',
 		},
 		translationNotice: {
 			onlyInCzech: 'Tento obsah je zatím jen v češtině.',
@@ -168,6 +170,7 @@ export const translations: Record<Locale, Translations> = {
 			privacyLinkLabel: 'How I handle your data',
 			copyright: 'Vendula Šubert',
 			analyticsToggleLabel: 'Turn off analytics',
+			profilesLabel: 'Find me also on',
 		},
 		translationNotice: {
 			onlyInCzech: 'Tento obsah je zatím jen v češtině.',
