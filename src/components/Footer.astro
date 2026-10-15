@@ -1,6 +1,6 @@
 ---
 import Newsletter from './Newsletter.astro';
-import { t, type Locale } from '../lib/i18n';
+import { t, siteName, type Locale } from '../lib/i18n';
 import broucekIcon from '../assets/ilustrace/vinetka_13.png';
 import { Image } from 'astro:assets';
 
@@ -40,7 +40,7 @@ const year = new Date().getFullYear();
 		<p class="copyright">
 			© {year}
 			<a rel="me" href={lang === 'cs' ? 'https://vendulasubert.cz/cs/' : 'https://vendulasubert.cz/en/'}>{copy.copyright}</a>
-			· ALEFUJ! ·
+			· {siteName(lang)} ·
 			<a href="#toggle-goatcounter">{copy.analyticsToggleLabel}</a>
 		</p>
 	</div>

@@ -34,7 +34,7 @@ const toggleHref = toggleHrefOverride ?? `${base}${other}/${section}`;
 
 <header class="site-header">
 	<div class="container inner">
-		<a class="logo" href={`${base}${lang}/`}>{siteName}</a>
+		<a class="logo" href={`${base}${lang}/`}>{siteName(lang)}</a>
 		<nav aria-label={lang === 'cs' ? 'Hlavní navigace' : 'Main navigation'}>
 			{
 				NAV.map((item) => (

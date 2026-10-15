@@ -18,7 +18,7 @@ interface Props {
 
 const { lang, section, toggleHref, title, description } = Astro.props;
 const isHome = section === '';
-const pageTitle = isHome ? title : `${title} — ${siteName}`;
+const pageTitle = isHome ? title : `${title} — ${siteName(lang)}`;
 
 const otherLang: Locale = lang === 'cs' ? 'en' : 'cs';
 const path = Astro.url.pathname;
@@ -29,21 +29,21 @@ const ogImageUrl = new URL('/og-image.jpg', Astro.site).href;
 const ogImageAlt =
 	lang === 'cs'
 		? 'Obálka knihy ALEFUJ! — teal ilustrace s brouky'
-		: 'Cover of ALEFUJ! — teal illustration with bugs';
+		: 'Cover of YOUCKY! — teal illustration with bugs';
 const ogLocale = lang === 'cs' ? 'cs_CZ' : 'en_US';
 const ogLocaleAlternate = otherLang === 'cs' ? 'cs_CZ' : 'en_US';
 
 const websiteJsonLd = {
 	'@context': 'https://schema.org',
 	'@type': 'WebSite',
-	name: siteName,
+	name: siteName(lang),
 	url: new URL(`/${lang}/`, Astro.site).href,
 	inLanguage: lang === 'cs' ? 'cs-CZ' : 'en-US',
 };
 const bookJsonLd = {
 	'@context': 'https://schema.org',
 	'@type': 'Book',
-	name: siteName,
+	name: siteName(lang),
 	// Same '@id' as the Person on vendulasubert.cz (src/lib/seo.ts there),
 	// so a crawler that sees both pages can tell it's the same entity
 	// rather than a namesake.
@@ -76,7 +76,7 @@ const jsonLd = isHome ? [websiteJsonLd, bookJsonLd] : [websiteJsonLd];
 		<link rel="icon" href={`${import.meta.env.BASE_URL}favicon.svg`} type="image/svg+xml" />
 
 		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content={siteName} />
+		<meta property="og:site_name" content={siteName(lang)} />
 		<meta property="og:title" content={pageTitle} />
 		<meta property="og:url" content={Astro.url.href} />
 		{description && <meta property="og:description" content={description} />}

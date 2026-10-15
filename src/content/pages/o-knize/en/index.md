@@ -9,4 +9,4 @@ Bára has it figured out: she wants to do science. Instead, she's watching two s
 
 In a story full of absurd humour, travel across Europe, and the history of actual Nobel laureates, their paths mostly miss each other by a few minutes.
 
-ALEFUJ! is a detective story, a philosophical road movie, and a celebration of curiosity.
+YOUCKY! is a detective story, a philosophical road movie, and a celebration of curiosity.

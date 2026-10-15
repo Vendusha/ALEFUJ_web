@@ -2,7 +2,13 @@ export const locales = ['cs', 'en'] as const;
 export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = 'cs';
 
-export const siteName = 'ALEFUJ!';
+// The book's Czech title stays ALEFUJ! everywhere (it's the real title);
+// YOUCKY! is only its English name, used wherever the site renders in
+// English. This has nothing to do with the alefuj.cz domain, which stays
+// alefuj.cz regardless of language.
+export function siteName(lang: Locale): string {
+	return lang === 'cs' ? 'ALEFUJ!' : 'YOUCKY!';
+}
 
 // "ALEFUJ! novinky" list on MailerLite (a separate provider/account from
 // vendulasubert.cz's Ecomail newsletter — and a separate form/list from
@@ -160,7 +166,7 @@ export const translations: Record<Locale, Translations> = {
 			},
 		},
 		footer: {
-			newsletterHeading: 'Email me when the ALEFUJ! campaign launches',
+			newsletterHeading: 'Email me when the YOUCKY! campaign launches',
 			newsletterBody:
 				"We won't flood your inbox. We'll write shortly before the campaign starts, during it, and after it — so the first email from us will arrive in a few months.",
 			emailLabel: 'Email',

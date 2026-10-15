@@ -1,7 +1,7 @@
 ---
 title: "Privacy"
 lang: en
-description: "How ALEFUJ! handles personal data: campaign emails, anonymous traffic measurement via GoatCounter, and your rights."
+description: "How YOUCKY! handles personal data: campaign emails, anonymous traffic measurement via GoatCounter, and your rights."
 ---
 
 ## Who is the data controller

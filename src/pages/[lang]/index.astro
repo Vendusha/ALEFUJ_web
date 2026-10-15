@@ -46,7 +46,12 @@ const READ_NOW = [
 				</div>
 			</div>
 			<div class="hero-cover">
-				<Image src={frontCover} alt="Obálka knihy ALEFUJ!" widths={[400, 700, 1000]} sizes="(min-width: 760px) 40vw, 80vw" />
+				<Image
+					src={frontCover}
+					alt={lang === 'cs' ? 'Obálka knihy ALEFUJ!' : 'Cover of the book YOUCKY!'}
+					widths={[400, 700, 1000]}
+					sizes="(min-width: 760px) 40vw, 80vw"
+				/>
 			</div>
 		</div>
 		<div class="container house-divider">

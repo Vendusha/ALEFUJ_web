@@ -1,5 +1,5 @@
 ---
-title: "ALEFUJ! — a comic novel by Vendula Šubert"
+title: "YOUCKY! — a comic novel by Vendula Šubert"
 lang: en
 description: "A comic novel by Vendula Šubert. Kosťa keeps looking for work that means something; Bára is chasing the man who anonymously advised the Nobel Committee."
 ---
